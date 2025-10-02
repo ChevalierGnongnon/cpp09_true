@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/02 13:50:54 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/02 16:49:25 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ std::map<Date, float> BitcoinExchange::loadData(std::map<Date, float> target, st
     int                             lineNumber = 1;
     
     while (std::getline(file, line)){
-        parseLine(line, sep, lineNumber);
+        parseLine(target, line, sep, lineNumber);
         lineNumber++;
     }
 	return (data);
@@ -108,17 +108,56 @@ void		BitcoinExchange::errorBadInput(const std::string &line, int lineNumber){
 	std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
 }
 
-float		BitcoinExchange::parseValue(const std::string &valueString){
+bool BitcoinExchange::checkIsValidFloat(const std::string &s) {
+    bool	hasDigit = false;
+    bool	hasDot = false;
+	size_t	i = 0;
 	
+	if (s.empty())
+		return (false);
+    if (s[i] == '+' || s[i] == '-') {
+        ++i;
+        if (i == s.size())
+			return (false);
+    }
+    for (; i < s.size(); ++i) {
+        
+        if (s[i] >= '0' && s[i] <= '9')
+            hasDigit = (true);
+        else if (s[i] == '.') {
+            if (hasDot)
+				return false;
+			hasDot = true;
+			if (i + 1 >= s.size())
+				return false;
+			if (!(s[i + 1] >= '0' && s[i + 1] <= '9'))
+				return false;
+        }
+		else
+            return (false);
+    }
+    return (hasDigit);
 }
 
-void		BitcoinExchange::parseLine(const std::string &line, char sep, int lineNumber){
+float		BitcoinExchange::parseValue(const std::string &valueString){
+	if (!checkIsValidFloat(valueString))
+		return (-1.0f);
+	std::istringstream iss(valueString);
+    float v = 0.0f;
+	 iss >> v;
+    if (iss.fail())
+        return (-1.0f);
+    if (!iss.eof())
+        return (-1.0f);
+    return (v);
+}
+
+void		BitcoinExchange::parseLine(std::map<Date, float> target, const std::string &line, char sep, int lineNumber){
     std::string dateString;
     std::string valueString;
     std::string tmp;
     int         sepPos = sepCheck(line, sep);
-    int         i = 0;
-    int         j = 0;
+	float		value;
     
     if (sepPos < 1 || sepPos >= (int)line.size() - 1)
         return (errorBadInput(line, lineNumber));
@@ -144,5 +183,7 @@ void		BitcoinExchange::parseLine(const std::string &line, char sep, int lineNumb
         Date newOne = parseDate(dateString);
         if (newOne.getYear() == -1)
             return (errorBadInput(line, lineNumber));
+		value = parseValue(valueString);
     }
+	
 }

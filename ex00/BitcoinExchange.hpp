@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/02 13:49:32 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/02 15:20:36 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <cctype>
 #include <cstdlib>
+#include <sstream>
 #include "Date.hpp"
 
 class BitcoinExchange{
@@ -35,11 +36,12 @@ class BitcoinExchange{
 
 		int 					sepCheck(const std::string &line, char sep);
 		bool 					checkIsNum(const std::string &value);
+		bool 					checkIsValidFloat(const std::string &value);
 		std::string 			cutSpaces(const std::string &tmp);
 		
 		void					errorBadInput(const std::string &line, int lineNumber);
 
 		Date 					parseDate(const std::string &line);
-		void					parseLine(const std::string &line, char sep, int lineNumber);
+		void					parseLine(std::map<Date, float> target, const std::string &line, char sep, int lineNumber);
 		float					parseValue(const std::string &valuString);
 };
