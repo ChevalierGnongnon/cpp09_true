@@ -6,30 +6,40 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/01 15:19:33 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:49:32 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <map>
 #include <string>
 #include <fstream>
+#include <stdexcept>
+#include <cctype>
+#include <cstdlib>
 #include "Date.hpp"
 
 class BitcoinExchange{
 	private :
-		std::map <Date, float>	exchangeRates;
+		std::map <Date, float>	dataCSV;
+		std::map <Date, float>	valuesCSV;
 		BitcoinExchange();
 	public :
-		BitcoinExchange(std::fstream &dataBase);
+		BitcoinExchange(std::fstream &dataFile, std::fstream &valueFile);
 		BitcoinExchange(const BitcoinExchange &src);
 		~BitcoinExchange();
 
 		BitcoinExchange &operator=(const BitcoinExchange &src);
 
-		std::map<Date, float>	loadData(std::fstream &file);
+		std::map<Date, float>	loadData(std::map<Date, float> target, std::fstream &file, char sep);
 		float					getRate(const std::string &date) const;
 
+		int 					sepCheck(const std::string &line, char sep);
+		bool 					checkIsNum(const std::string &value);
+		std::string 			cutSpaces(const std::string &tmp);
+		
+		void					errorBadInput(const std::string &line, int lineNumber);
+
+		Date 					parseDate(const std::string &line);
 		void					parseLine(const std::string &line, char sep, int lineNumber);
-		Date					parseDate(const std::string &dateString);
-		float					parseValue(const std::string &value);
+		float					parseValue(const std::string &valuString);
 };

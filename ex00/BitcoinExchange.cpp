@@ -6,24 +6,22 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/01 19:05:29 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:50:54 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
-#include "utils.hpp"
 #include "Date.hpp"
-#include <stdexcept>
-#include <cctype>
 
-BitcoinExchange::BitcoinExchange(std::fstream &dataBase){
-	std::map<Date, float>::iterator i = this->exchangeRates.begin();
-    
-    this->exchangeRates = loadData();
+
+BitcoinExchange::BitcoinExchange(std::fstream &dataFile, std::fstream &valueFile){
+    this->dataCSV = loadData(this->dataCSV, dataFile, ',');
+	this->valuesCSV = loadData(this->valuesCSV, valueFile, '|');
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &src){
-	this->exchangeRates = src.exchangeRates;
+	this->dataCSV = src.dataCSV;
+	this->valuesCSV = src.valuesCSV;
 }
 
 BitcoinExchange::~BitcoinExchange(){
@@ -32,24 +30,26 @@ BitcoinExchange::~BitcoinExchange(){
 
 BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src){
     if (this != &src){
-        this->exchangeRates = src.exchangeRates;
+        this->dataCSV = src.dataCSV;
+		this->valuesCSV = src.valuesCSV;
     }
     return (*this);
 }
 
-std::map<Date, float> BitcoinExchange::loadData(std::fstream &file){
+std::map<Date, float> BitcoinExchange::loadData(std::map<Date, float> target, std::fstream &file, char sep){
 	std::map<Date, float>           data;
     std::map<Date, float>::iterator it;
     std::string                     line;
     int                             lineNumber = 1;
     
     while (std::getline(file, line)){
-        parseLine(line, '|', lineNumber);
+        parseLine(line, sep, lineNumber);
         lineNumber++;
     }
+	return (data);
 }
 
-static int sepCheck(const std::string &line, char sep){
+int BitcoinExchange::sepCheck(const std::string &line, char sep){
     int place = -1;
     int n = 0;
     
@@ -67,7 +67,7 @@ static int sepCheck(const std::string &line, char sep){
     return (place);
 }
 
-bool checkIsNum(const std::string &value){
+bool BitcoinExchange::checkIsNum(const std::string &value){
     if (value.empty())
         return (false);
     for (size_t i = 0; i < value.size(); i++){
@@ -76,8 +76,22 @@ bool checkIsNum(const std::string &value){
     }
     return (true);
 }
-static Date parseDate(const std::string &line){
+
+std::string BitcoinExchange::cutSpaces(const std::string &tmp){
+	const std::string	value;
+	int					i = 0;
+	int					j = tmp.size() - 1;
+	
+	while (i < (int)tmp.size() && std::isspace((unsigned char)tmp[i]))
+		i++;
+	while (j >= i && std::isspace((unsigned char)tmp[j]))
+		j--;
+	return(tmp.substr(i, j - i + 1));
+}
+
+Date BitcoinExchange::parseDate(const std::string &line){
     std::string ys, ms, ds;
+	
     if (line.size() == 10 && (line[4] != '-' || line[7] != '-'))
         return (Date(-1, -1, -1));
     if ((line.size() == 10) && line[4] == '-' && line[7] == '-'){
@@ -90,6 +104,13 @@ static Date parseDate(const std::string &line){
     return (Date(-1, -1, -1));
 }
 
+void		BitcoinExchange::errorBadInput(const std::string &line, int lineNumber){
+	std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
+}
+
+float		BitcoinExchange::parseValue(const std::string &valueString){
+	
+}
 
 void		BitcoinExchange::parseLine(const std::string &line, char sep, int lineNumber){
     std::string dateString;
@@ -99,51 +120,29 @@ void		BitcoinExchange::parseLine(const std::string &line, char sep, int lineNumb
     int         i = 0;
     int         j = 0;
     
-    if (sepPos < 1 || sepPos >= (int)line.size() - 1){
-        std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
-        return ;
-    }
+    if (sepPos < 1 || sepPos >= (int)line.size() - 1)
+        return (errorBadInput(line, lineNumber));
     try{
         tmp = line.substr(0, sepPos);
-        j = tmp.size() - 1;
-        while (i < (int)tmp.size() && std::isspace((unsigned char)tmp[i]))
-            i++;
-        while (j >= i && std::isspace((unsigned char)tmp[j]))
-            j--;
-        dateString = tmp.substr(i, j - i + 1);
+        dateString = cutSpaces(tmp);
         tmp = "";
     } catch (const std::out_of_range &e){
-        std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
-        return ;
-    }
+        return (errorBadInput(line, lineNumber));
+	}
     try{
         tmp = line.substr(sepPos + 1);
-        i = 0;
-        j = tmp.size() - 1;
-        while (i < (int)tmp.size() && std::isspace((unsigned char)tmp[i]))
-            i++;
-        while (j >= i && std::isspace((unsigned char)tmp[j]))
-            j--;
-        valueString = tmp.substr(i, j - i + 1);
+        valueString = cutSpaces(tmp);
         tmp = "";
     } catch (const std::out_of_range &e){
-        std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
-        return ;
+        return (errorBadInput(line, lineNumber));
     }
-    if (valueString.empty()) {
-        std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
-        return; 
-    }
-    if (dateString.size() != 10){      
-        std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
-        return ;
-    }
+    if (valueString.empty())
+        return (errorBadInput(line, lineNumber));
+    if (dateString.size() != 10)
+        return (errorBadInput(line, lineNumber));
     if (dateString.size() == 10){
         Date newOne = parseDate(dateString);
-        if (newOne.getYear() == -1){
-            std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
-            return ;
-        }
-   }
-   
+        if (newOne.getYear() == -1)
+            return (errorBadInput(line, lineNumber));
+    }
 }
