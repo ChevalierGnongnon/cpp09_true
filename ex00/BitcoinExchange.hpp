@@ -6,10 +6,11 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/02 15:20:36 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/05 14:47:28 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include <map>
 #include <string>
 #include <fstream>
@@ -17,6 +18,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <sstream>
+#include <iostream>
 #include "Date.hpp"
 
 class BitcoinExchange{
@@ -31,17 +33,19 @@ class BitcoinExchange{
 
 		BitcoinExchange &operator=(const BitcoinExchange &src);
 
-		std::map<Date, float>	loadData(std::map<Date, float> target, std::fstream &file, char sep);
-		float					getRate(const std::string &date) const;
+		void			loadData(std::map<Date, float> &target, std::fstream &file, char sep);
+		float			getRate(const Date &date) const;
 
-		int 					sepCheck(const std::string &line, char sep);
-		bool 					checkIsNum(const std::string &value);
-		bool 					checkIsValidFloat(const std::string &value);
-		std::string 			cutSpaces(const std::string &tmp);
+		int 			sepCheck(const std::string &line, char sep);
+		bool 			checkIsNum(const std::string &value);
+		bool 			checkIsValidFloat(const std::string &value);
+		std::string		cutSpaces(const std::string &tmp);
 		
-		void					errorBadInput(const std::string &line, int lineNumber);
+		void			errorBadInput(const std::string &line, int lineNumber);
+		void			errorNotPositive(const std::string &line, int lineNumber);
+		void			errorTooLargeNumber(const std::string &line, int lineNumber);
 
-		Date 					parseDate(const std::string &line);
-		void					parseLine(std::map<Date, float> target, const std::string &line, char sep, int lineNumber);
-		float					parseValue(const std::string &valuString);
+		Date 			parseDate(const std::string &line);
+		void			parseLine(std::map<Date, float> &target, const std::string &line, char sep, int lineNumber);
+		float			parseValue(const std::string &valueString);
 };

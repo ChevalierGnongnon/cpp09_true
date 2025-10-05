@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/02 16:49:25 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/05 14:49:18 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 
 BitcoinExchange::BitcoinExchange(std::fstream &dataFile, std::fstream &valueFile){
-    this->dataCSV = loadData(this->dataCSV, dataFile, ',');
-	this->valuesCSV = loadData(this->valuesCSV, valueFile, '|');
+    loadData(this->dataCSV, dataFile, ',');
+	loadData(this->valuesCSV, valueFile, '|');
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &src){
@@ -36,9 +36,7 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src){
     return (*this);
 }
 
-std::map<Date, float> BitcoinExchange::loadData(std::map<Date, float> target, std::fstream &file, char sep){
-	std::map<Date, float>           data;
-    std::map<Date, float>::iterator it;
+void BitcoinExchange::loadData(std::map<Date, float> &target, std::fstream &file, char sep){
     std::string                     line;
     int                             lineNumber = 1;
     
@@ -46,7 +44,6 @@ std::map<Date, float> BitcoinExchange::loadData(std::map<Date, float> target, st
         parseLine(target, line, sep, lineNumber);
         lineNumber++;
     }
-	return (data);
 }
 
 int BitcoinExchange::sepCheck(const std::string &line, char sep){
@@ -78,14 +75,15 @@ bool BitcoinExchange::checkIsNum(const std::string &value){
 }
 
 std::string BitcoinExchange::cutSpaces(const std::string &tmp){
-	const std::string	value;
-	int					i = 0;
-	int					j = tmp.size() - 1;
+	int	i = 0;
+	int	j = tmp.size() - 1;
 	
 	while (i < (int)tmp.size() && std::isspace((unsigned char)tmp[i]))
 		i++;
 	while (j >= i && std::isspace((unsigned char)tmp[j]))
 		j--;
+	if (i > j)
+		return ("");
 	return(tmp.substr(i, j - i + 1));
 }
 
@@ -106,6 +104,14 @@ Date BitcoinExchange::parseDate(const std::string &line){
 
 void		BitcoinExchange::errorBadInput(const std::string &line, int lineNumber){
 	std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
+}
+
+void		BitcoinExchange::errorNotPositive(const std::string &line, int lineNumber){
+	std::cerr << "Error: not a positive number => " << line << " (line " << lineNumber << ")" << std::endl;
+}
+
+void		BitcoinExchange::errorTooLargeNumber(const std::string &line, int lineNumber){
+	std::cerr << "Error: too large a number => " << line << " (line " << lineNumber << ")" << std::endl;
 }
 
 bool BitcoinExchange::checkIsValidFloat(const std::string &s) {
@@ -152,7 +158,7 @@ float		BitcoinExchange::parseValue(const std::string &valueString){
     return (v);
 }
 
-void		BitcoinExchange::parseLine(std::map<Date, float> target, const std::string &line, char sep, int lineNumber){
+void		BitcoinExchange::parseLine(std::map<Date, float> &target, const std::string &line, char sep, int lineNumber){
     std::string dateString;
     std::string valueString;
     std::string tmp;
@@ -184,6 +190,19 @@ void		BitcoinExchange::parseLine(std::map<Date, float> target, const std::string
         if (newOne.getYear() == -1)
             return (errorBadInput(line, lineNumber));
 		value = parseValue(valueString);
-    }
+		if (value == -1.0f)
+			return (errorBadInput(line, lineNumber));
+		if (sep == '|'){
+			if (value < 0.0f)
+				return (errorNotPositive(line, lineNumber));
+			if (value > 1000.0f)
+				return (errorTooLargeNumber(line, lineNumber));
+		}
+		else {
+			if (value < 0.0f)
+				return (errorBadInput(line, lineNumber));
+		}
+		target[newOne] = value;
+	}
 	
 }
