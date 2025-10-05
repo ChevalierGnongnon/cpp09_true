@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/05 14:49:18 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/05 16:47:51 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,26 @@ void BitcoinExchange::loadData(std::map<Date, float> &target, std::fstream &file
         parseLine(target, line, sep, lineNumber);
         lineNumber++;
     }
+}
+
+float			BitcoinExchange::getRate(const Date &date) const{
+	std::map<Date, float>::const_iterator it = this->dataCSV.begin();
+	std::map<Date, float>::const_iterator prev = this->dataCSV.end();
+	
+	if (this->dataCSV.empty())
+		throw (std::runtime_error("empty rates"));
+	while (it != this->dataCSV.end() && it->first < date){
+		prev = it;
+		++it;
+	}
+	if (it != this->dataCSV.end()){
+		if (!(date < it->first) && !(it->first < date)){
+			return (it->second);
+		}
+	}
+	if (prev != this->dataCSV.end())
+		return (prev->second);
+	throw (std::runtime_error("no earlier rate"));
 }
 
 int BitcoinExchange::sepCheck(const std::string &line, char sep){
