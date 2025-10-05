@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/05 16:47:51 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/05 17:31:18 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,3 +226,28 @@ void		BitcoinExchange::parseLine(std::map<Date, float> &target, const std::strin
 	}
 	
 }
+
+static std::string formatDate(const Date &d){
+    std::ostringstream oss;
+    oss << d.getYear() << "-" << std::setw(2) << std::setfill('0') << d.getMonth() << "-" << std::setw(2) << std::setfill('0') << d.getDay();
+    return (oss.str());
+}
+
+void	BitcoinExchange::evaluate(const Date &date) const{
+	std::map<Date, float>::const_iterator	it;
+	
+	for (it = this->valuesCSV.begin(); it != this->valuesCSV.end(); ++it){
+		const Date	&d = it->first;
+		float		value = it->second;
+		float		rate;
+
+		try{
+			rate = this->getRate(date);
+			std::cout << formatDate(d) << " => " << value << " = " << (rate * value) << std::endl;
+		} catch (const std::exception &e){
+            std::cerr << "Error: no earlier rate for " << formatDate(date) << std::endl;
+        }
+	
+	}
+}
+

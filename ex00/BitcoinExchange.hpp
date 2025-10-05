@@ -6,11 +6,12 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/05 14:47:28 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/05 17:31:23 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+#include <iomanip>
 #include <map>
 #include <string>
 #include <fstream>
@@ -48,4 +49,6 @@ class BitcoinExchange{
 		Date 			parseDate(const std::string &line);
 		void			parseLine(std::map<Date, float> &target, const std::string &line, char sep, int lineNumber);
 		float			parseValue(const std::string &valueString);
+
+		void			evaluate(const Date &date) const;
 };
