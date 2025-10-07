@@ -6,14 +6,15 @@
 #    By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 14:35:45 by chhoflac          #+#    #+#              #
-#    Updated: 2025/06/20 14:09:53 by chhoflac         ###   ########.fr        #
+#    Updated: 2025/10/07 13:51:45 by chhoflac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = btc
 
 SOURCES = main.cpp \
-		BitcoinExchange.cpp
+		BitcoinExchange.cpp \
+		Date.cpp
 		
 OBJS = $(SOURCES:.cpp=.o)
 

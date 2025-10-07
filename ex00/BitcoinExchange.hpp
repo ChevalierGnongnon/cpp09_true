@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/07 11:59:07 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/07 12:40:24 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,5 @@ class BitcoinExchange{
 		void			parseLine(std::multimap<Date, float> &target, const std::string &line, char sep, int lineNumber);
 		float			parseValue(const std::string &valueString);
 
-		void			evaluate(const Date &date) const;
+		void			evaluate() const;
 };

@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/07 12:00:35 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/07 14:26:31 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,8 +201,15 @@ void		BitcoinExchange::parseLine(std::multimap<Date, float> &target, const std::
     } catch (const std::out_of_range &e){
         return (errorBadInput(line, lineNumber));
     }
-    if (valueString.empty())
-        return (errorBadInput(line, lineNumber));
+    if (valueString.empty()){
+		return (errorBadInput(line, lineNumber));	
+	}
+	if (lineNumber == 1 && sep == '|' && (dateString == "date" || dateString == "Date") && ((valueString == "value" || valueString == "Value"))){
+		return ;
+	}
+	if (lineNumber == 1 && sep == ',' && (dateString == "date" || dateString == "Date") && ((valueString == "exchange_rate"))){
+		return ;
+	}
     if (dateString.size() != 10)
         return (errorBadInput(line, lineNumber));
     if (dateString.size() == 10){
@@ -222,7 +229,7 @@ void		BitcoinExchange::parseLine(std::multimap<Date, float> &target, const std::
 			if (value < 0.0f)
 				return (errorBadInput(line, lineNumber));
 		}
-		target[newOne] = value;
+		target.insert(std::multimap<Date, float>::value_type(newOne, value));
 	}
 }
 
@@ -232,7 +239,7 @@ static std::string formatDate(const Date &d){
     return (oss.str());
 }
 
-void	BitcoinExchange::evaluate(const Date &date) const{
+void	BitcoinExchange::evaluate() const{
 	std::multimap<Date, float>::const_iterator	it;
 	
 	for (it = this->valuesCSV.begin(); it != this->valuesCSV.end(); ++it){
