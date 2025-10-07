@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 09:40:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/07 13:46:37 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/07 14:31:24 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ int main(int argc, char **argv){
 	}
 	BitcoinExchange ex(dataFile, valueFile);
 	ex.evaluate();
+	dataFile.close();
+	valueFile.close();
 	return (0);
 }
