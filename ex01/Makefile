@@ -6,11 +6,11 @@
 #    By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/07 14:39:29 by chhoflac          #+#    #+#              #
-#    Updated: 2025/10/07 14:39:45 by chhoflac         ###   ########.fr        #
+#    Updated: 2025/10/12 12:19:21 by chhoflac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = btc
+NAME = RPN
 
 SOURCES = main.cpp \
 		RPN.cpp

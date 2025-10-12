@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:39:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/09 10:52:30 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/12 16:55:01 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,35 +22,65 @@ RPN::RPN(const std::string &entry) : expression(entry){
 
 RPN::RPN(const RPN &src){
 	this->digits = src.digits;
+	this->expression = src.expression;
 }
 
 RPN &RPN::operator=(const RPN &src){
-	if (this != &src)
+	if (this != &src){
 		this->digits = src.digits;
+		this->expression = src.expression;
+	}
 	return (*this);
 }
 RPN::~RPN(){
 	
 }
 
-bool					RPN::isValidDigit(long long &out) const{
-
+bool					RPN::isOperator(char c){
+	if (c == '+' || c == '-' || c == '/' || c == '*')
+		return (true);
+	return (false);
 }
 
-bool					RPN::pushIfDigit(const std::string &tok){
-	
+long long				RPN::makeOperation(long long a, long long b, char op){
+	long long res;
+	switch (op){
+		case '+':
+			res = a + b;
+			break ;
+		case '-':
+			res = a - b;
+			break ;
+		case '*':
+			res = a * b;
+			break ;
+		case '/':
+			if (b == 0)
+				throw (RPN::DivisionByZeroException());
+			res = a / b;	
+			break ;
+		default :
+			throw (RPN::InvalidInputException());
+	}
+	return (res);
 }
 
-
-size_t					RPN::digitCount() const{
-	
+void					RPN::pushIfValid(int *key){
+	for ()
 }
 
-long long				RPN::makeOperation(int a, int b, char sign){
-	
-}
-bool					RPN::isOperator(char c) const{
-	
+long long 				RPN::evaluate(){
+	std::stack<long long>	cont;
+	int						i = 0;
+	while (i < expression.size()){
+		if (isOperator(this->expression[i]))
+			pushIfValid(&i);
+		else if (!isOperator(expression[i])){
+			makeOperation()
+		}
+		else
+			throw (RPN::InvalidInputException());
+	}
 }
 
 const char				*RPN::DivisionByZeroException::what() const throw(){
