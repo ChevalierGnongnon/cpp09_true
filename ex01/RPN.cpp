@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:39:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/13 13:35:52 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:46:03 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,33 +71,42 @@ void				RPN::makeOperation(char op){
 		}
 		this->digits.push(res);
 	}
+	else 
+		throw (RPN::NoDigitsException());
 }
 
 
 
 long long 				RPN::evaluate(){
-	std::stack<long long>	cont;
-	int						i = 0;
+	size_t	i = 0;
+
+	while (!this->digits.empty())
+		this->digits.pop();
 	while (i < expression.size()){
-		
 		if (isOperator(this->expression[i])){
+			if (i > 0 && !std::isspace((unsigned char)expression[i - 1]))
+    			throw RPN::InvalidInputException();
 			makeOperation(this->expression[i]);
 			i++;
-			while (this->expression[i] && isspace(this->expression[i]))
+			while (i < this->expression.size() && isspace((unsigned char) this->expression[i]))
 				i++;
 			continue ;
 		}
 		else if (this->expression[i] >= '0' && this->expression[i] <= '9'){
-			if (i == this->expression.size() || (i + 1 < this->expression.size() && isspace(this->expression[i + 1]))){
+			if (i > 0 && !std::isspace((unsigned char)expression[i - 1]))
+    			throw RPN::InvalidInputException();
+			if (i + 1 == this->expression.size() || (i + 1 < this->expression.size() && isspace((unsigned char)this->expression[i + 1]))){
 				this->digits.push(static_cast<long long>(this->expression[i] - '0'));
 				i++;
-				while (this->expression[i] && isspace(this->expression[i]))
+				while (i < this->expression.size() && isspace((unsigned char)this->expression[i]))
 					i++;
 				continue ;
 			}
+			else if (i + 1 < this->expression.size() && (this->expression[i + 1] >= '0' && (this->expression[i + 1] <= '9')))
+				throw (RPN::TooHighDigitException());
 			throw (RPN::InvalidInputException());
 		}
-		else if (isspace(expression[i]))
+		else if (isspace((unsigned char) expression[i]))
 			i++;
 		else
 			throw (RPN::InvalidInputException());
@@ -106,8 +115,7 @@ long long 				RPN::evaluate(){
 		throw (RPN::InvalidInputException());
 	if (this->digits.size() > 1)
 		throw (RPN::NoOperatorException());
-	if 
-		
+	return (this->digits.top());
 }
 
 const char				*RPN::DivisionByZeroException::what() const throw(){

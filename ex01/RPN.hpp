@@ -6,11 +6,13 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:39:54 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/13 13:32:33 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:49:19 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include <stack>
+#include <cctype>
 #include <exception>
 #include <string>
 
