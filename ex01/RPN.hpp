@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:39:54 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/12 16:31:11 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/13 13:32:33 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ class RPN{
 	private :
 		std::string				expression;
 		std::stack<long long>	digits;
-		static long long		makeOperation(long long a, long long b, char op);
 		static bool				isOperator(char c);
 	public :
 		RPN();
@@ -27,13 +26,11 @@ class RPN{
 		RPN &operator=(const RPN &src);
 		~RPN();
 
-		bool					isValidDigit(const std::string &entry, long long &out) const;
-		bool					isValidEntry(const std::string &entry);
-		void					pushIfValid(int *key);
-		size_t					digitCount() const;
-
-		
-		
+		// bool					isValidDigit(const std::string &entry, long long &out) const;
+		// bool					isValidEntry(const std::string &entry);
+		// void					pushIfValid(int *key);
+		// size_t					digitCount() const;
+		void					makeOperation(char op);
 		long long				evaluate();
 		
 		class DivisionByZeroException : public std::exception{
