@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/21 16:35:30 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/22 19:13:15 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <deque>
 # include <cctype>
 # include <limits.h>
+
 
 class PMergeMe{
 	private :
@@ -36,6 +37,8 @@ class PMergeMe{
 		
 		void				fillVector();
 		void				fillDeque();
+		
+		void				formPairs(std::vector<std::pair<int, int> > &pairs, int limit);
 		
 		void				sortVect();
 		void				sortDeque();

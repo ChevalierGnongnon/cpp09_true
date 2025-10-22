@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/21 17:29:08 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/22 19:14:38 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,38 @@ void				PMergeMe::fillDeque(){
 	}
 }
 
-void				PMergeMe::sortVect(){
+void PMergeMe::formPairs(std::vector<std::pair<int, int> > &pairs, int limit){
+	int									i = 0;
+	int									min;
+	int									max;
 	
+	while (i + 1 < limit){
+		if (this->vect[i] < this->vect[i + 1]){
+			min = this->vect[i];
+			max	= this->vect[i + 1];
+		}
+		else {
+			max = this->vect[i];
+			min	= this->vect[i + 1];
+		}
+		pairs.push_back(std::pair<int, int>(min, max)); //to avoid <utility> , i use constructor
+		i += 2;
+	}
+}
+
+void				PMergeMe::sortVect(){
+	std::vector<std::pair<int, int> >	pairs;
+	size_t								i = 0;
+	size_t								limit = this->vect.size();
+	int									straggler;
+	bool								hasStraggler = false;
+	
+	if (this->vect.size() % 2 == 1){
+		hasStraggler = true;
+		straggler = vect.back();
+		limit--;
+	}
+	formPairs(pairs, limit);
 }
 void				PMergeMe::sortDeque(){
 	
