@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/22 19:14:38 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/23 18:17:00 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,12 @@ void				PMergeMe::fillDeque(){
 	}
 }
 
-void PMergeMe::formPairs(std::vector<std::pair<int, int> > &pairs, int limit){
-	int									i = 0;
+void PMergeMe::formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit){
+	size_t								i = 0;
 	int									min;
 	int									max;
 	
+	pairs.clear();
 	while (i + 1 < limit){
 		if (this->vect[i] < this->vect[i + 1]){
 			min = this->vect[i];
@@ -124,6 +125,48 @@ void PMergeMe::formPairs(std::vector<std::pair<int, int> > &pairs, int limit){
 	}
 }
 
+void PMergeMe::formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit){
+	size_t								i = 0;
+	int									min;
+	int									max;
+	
+	pairs.clear();
+	while (i + 1 < limit){
+		if (this->cont[i] < this->cont[i + 1]){
+			min = this->cont[i];
+			max	= this->cont[i + 1];
+		}
+		else {
+			max = this->cont[i];
+			min	= this->cont[i + 1];
+		}
+		pairs.push_back(std::pair<int, int>(min, max)); //to avoid <utility> , i use constructor
+		i += 2;
+	}
+}
+
+double				PMergeMe::runVectorPipelineUs(){
+	struct timeval	start;
+	struct timeval	end;
+	
+	gettimeofday(&start, NULL);
+	fillVector();
+	sortVect();
+	gettimeofday(&end, NULL);
+	return ((end.tv_sec - start.tv_sec) * 1e6 + (end.tv_usec - start.tv_usec));
+}
+
+double				PMergeMe::runDequePipelineUs(){
+	struct timeval	start;
+	struct timeval	end;
+	
+	gettimeofday(&start, NULL);
+	fillDeque();
+	sortDeque();
+	gettimeofday(&end, NULL);
+	return ((end.tv_sec - start.tv_sec) * 1e6 + (end.tv_usec - start.tv_usec));
+}
+
 void				PMergeMe::sortVect(){
 	std::vector<std::pair<int, int> >	pairs;
 	size_t								i = 0;
@@ -136,8 +179,11 @@ void				PMergeMe::sortVect(){
 		straggler = vect.back();
 		limit--;
 	}
-	formPairs(pairs, limit);
+	formPairsVect(pairs, limit);
 }
+
+
+
 void				PMergeMe::sortDeque(){
 	
 }

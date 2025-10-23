@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/22 19:13:15 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/23 15:38:54 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <deque>
 # include <cctype>
 # include <limits.h>
+# include <sys/time.h>
 
 
 class PMergeMe{
@@ -30,18 +31,20 @@ class PMergeMe{
 		PMergeMe(const PMergeMe	&src);
 		PMergeMe &operator=(const PMergeMe &src);
 		~PMergeMe();
-
-		bool				checkInput();
 		
 		int 				getValue(size_t *i);
 		
 		void				fillVector();
 		void				fillDeque();
 		
-		void				formPairs(std::vector<std::pair<int, int> > &pairs, int limit);
-		
+		void				formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit);
+		void				formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit);
+				
 		void				sortVect();
 		void				sortDeque();
+
+		double				runVectorPipelineUs();
+		double				runDequePipelineUs();
 		
 		class NoIntsException : public std::exception{
 			public :
