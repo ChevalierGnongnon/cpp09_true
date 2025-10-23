@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/23 18:17:00 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/23 18:37:58 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void PMergeMe::formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t li
 	}
 }
 
-void PMergeMe::formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit){
+void				PMergeMe::formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit){
 	size_t								i = 0;
 	int									min;
 	int									max;
@@ -166,9 +166,17 @@ double				PMergeMe::runDequePipelineUs(){
 	gettimeofday(&end, NULL);
 	return ((end.tv_sec - start.tv_sec) * 1e6 + (end.tv_usec - start.tv_usec));
 }
+void				getMaxes(const std::vector <std::pair<int, int> > &pairs, std::vector <int> &maxes){
+	maxes.clear();
+	maxes.reserve(pairs.size());
+	for (size_t i = 0; i < pairs.size(); i++){
+		maxes.push_back(pairs[i].second);
+	}
+}
 
 void				PMergeMe::sortVect(){
 	std::vector<std::pair<int, int> >	pairs;
+	std::vector<int>					maxes;
 	size_t								i = 0;
 	size_t								limit = this->vect.size();
 	int									straggler;
@@ -180,6 +188,7 @@ void				PMergeMe::sortVect(){
 		limit--;
 	}
 	formPairsVect(pairs, limit);
+	getMaxes(pairs, maxes);
 }
 
 
