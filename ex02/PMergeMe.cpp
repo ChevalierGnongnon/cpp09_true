@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/24 16:06:58 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/27 16:09:50 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,20 +173,45 @@ static void				getMaxes(const std::vector <std::pair<int, int> > &pairs, std::ve
 		maxes.push_back(pairs[i].second);
 	}
 }
-static void				getMins(const std::vector<std::pair<int, int> > &pairs, std::vector<int> mins){
+static void				getMins(const std::vector<std::pair<int, int> > &pairs, std::vector<int> &mins){
 	mins.clear();
 	mins.reserve(pairs.size());
 	for (size_t i = 0; i < pairs.size(); i++){
 		mins.push_back(pairs[i].first);
 	}
 }
+
+static void			insertionSort(std::vector<int> &base, std::vector<size_t> &keys){
+	size_t	i = 1;
+	size_t	j;
+	size_t	key;
+	int		val;
+	
+	if (base.empty() || keys.size() != base.size())
+   		return;
+	for (i; i < base.size(); ++i){
+		val = base[i];
+		key = keys[i];
+		j = i;
+		while (j > 0 && base[j - 1] > val){
+			base[j] = base[j - 1];
+			keys[j] = keys[j - 1];
+			--j;
+		}
+		base[j] = val;
+		keys[j] = key;
+	}
+}
+
 void				PMergeMe::sortVect(){
 	std::vector<std::pair<int, int> >	pairs;
+	std::vector<int>					result;
+	std::vector<long>					mark;
 	std::vector<int>					maxes;
 	std::vector<size_t>					keys;
 	std::vector <int>					mins;
-	size_t								i = 0;
 	size_t								limit = this->vect.size();
+	size_t								pairsSize;
 	int									straggler;
 	bool								hasStraggler = false;
 	
@@ -199,9 +224,20 @@ void				PMergeMe::sortVect(){
 	getMaxes(pairs, maxes);
 	getMins(pairs, mins);
 	keys.clear();
-	for (size_t j = 0; j < pairs.size() - 1; j++)
-		keys.push_back(i);
-	
+	for (size_t j = 0; j < pairs.size(); j++)
+		keys.push_back(j);
+	insertionSort(maxes, keys);
+	for (int k = 0; k < keys.size(); k++){
+		mark.push_back(static_cast<long>(keys[k]));
+	}
+	pairsSize = keys.size();
+	if (keys.size() == 0 && hasStraggler){
+		result.push_back(straggler);
+		return ;
+	}
+	else if (keys.size() == 0 && !hasStraggler)
+		return ;
+	result = maxes;
 }
 
 
