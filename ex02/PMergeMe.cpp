@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/28 19:53:29 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:07:28 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,26 +203,33 @@ static void			insertionSort(std::vector<int> &base, std::vector<size_t> &keys){
 	}
 }
 
-std::vector<int> makeJackobstahl(int size){
-	int 	a = 1;
-	int 	b = 1;
-	int		jzero = 0;
-	int		jone = 1;
-	int		jn;
+std::vector<size_t>	makeJacobsthal(size_t size){
+	std::vector<size_t>	j;
+	size_t				next;
 
 	
+	j.push_back(0);
+	j.push_back(1);
+	if (size <= 1)
+		return (j);
+	while (true){
+		next = j[j.size() - 1] + (2 * j[j.size() - 2]);
+		j.push_back(next);
+		if (next >= size)
+			break;
+	}
+	return (j);
 }
 
 void				PMergeMe::sortVect(){
 	std::vector<std::pair<int, int> >	pairs;
 	std::vector<int>					result;
-	std::vector<long>					mark;
 	std::vector<int>					maxes;
 	std::vector<size_t>					keys;
 	std::vector <int>					mins;
+	std::vector<size_t>					jackobstahl;
 	size_t								limit = this->vect.size();
 	size_t								pairsSize;
-	size_t								l;
 	std::vector<size_t>					pos;
 	int									straggler;
 	bool								hasStraggler = false;
@@ -239,9 +246,6 @@ void				PMergeMe::sortVect(){
 	for (size_t j = 0; j < pairs.size(); j++)
 		keys.push_back(j);
 	insertionSort(maxes, keys);
-	for (int k = 0; k < keys.size(); k++){
-		mark.push_back(static_cast<long>(keys[k]));
-	}
 	pairsSize = keys.size();
 	if (keys.size() == 0 && hasStraggler){
 		result.push_back(straggler);
@@ -250,8 +254,12 @@ void				PMergeMe::sortVect(){
 	else if (keys.size() == 0 && !hasStraggler)
 		return ;
 	result = maxes;
-	pos.push_back(1);
-	l = pairsSize;
+	jackobstahl = makeJacobsthal(pairsSize);
+	pos.resize(keys.size());
+	for (size_t k = 0; k < keys.size(); k++){
+		size_t p = keys[k];
+		pos[p] = k;
+	}
 }
 
 
