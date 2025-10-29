@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/29 15:07:28 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/29 16:38:27 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,17 @@ std::vector<size_t>	makeJacobsthal(size_t size){
 	return (j);
 }
 
+static size_t lower_bound_upto_vector(const std::vector<int> &vect, size_t lo, size_t hi, int v){
+	while (lo < hi){
+		size_t mid = lo + (hi -lo) / 2;
+		if (vect[mid] < v)
+			lo = mid + 1;
+		else
+			hi = mid;
+	}	
+	return (lo);
+}
+
 void				PMergeMe::sortVect(){
 	std::vector<std::pair<int, int> >	pairs;
 	std::vector<int>					result;
@@ -231,6 +242,7 @@ void				PMergeMe::sortVect(){
 	size_t								limit = this->vect.size();
 	size_t								pairsSize;
 	std::vector<size_t>					pos;
+	std::vector<size_t>					order;
 	int									straggler;
 	bool								hasStraggler = false;
 	
@@ -260,6 +272,38 @@ void				PMergeMe::sortVect(){
 		size_t p = keys[k];
 		pos[p] = k;
 	}
+	if (pairsSize > 0)
+		order.push_back(0);
+	for (size_t k = 2; k < jackobstahl.size(); ++k){
+		size_t	l = jackobstahl[k - 1];
+		size_t	r = jackobstahl[k] - 1;
+		if (l >= pairsSize)
+			break;
+		if (r >= pairsSize)
+			r = pairsSize - 1;
+		for (long index = static_cast<long>(r); index >= static_cast<long>(l); --index){
+			if (index == 0)
+				continue ;
+			order.push_back(static_cast<size_t>(index));
+		}
+	}
+	for (size_t oi = 0; oi < order.size(); ++oi){
+		size_t pidx = order[oi];
+		int    val  = mins[pidx];
+		size_t hi   = pos[pidx];
+		size_t ins  = lower_bound_upto_vector(result, 0, hi, val);
+
+		result.insert(result.begin() + ins, val);
+
+		for (size_t k = 0; k < pos.size(); ++k) {
+			if (pos[k] >= ins) pos[k]++;
+    	}
+	}
+	if (hasStraggler) {
+		size_t ins = lower_bound_upto_vector(result, 0, result.size(), straggler);
+		result.insert(result.begin() + ins, straggler);
+	}
+	this->vect = result;
 }
 
 
