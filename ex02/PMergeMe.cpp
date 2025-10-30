@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 11:02:14 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 13:54:57 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int PMergeMe::getValue(size_t *i) {
 	return (static_cast<int>(value));
 }
 
-
 //////////////////////////////////////////////////
 //////////////////////VECTOR//////////////////////
 //////////////////////////////////////////////////
@@ -92,28 +91,13 @@ void				PMergeMe::fillVector(){
 	}
 }
 
-void				PMergeMe::fillDeque(){
-	size_t	i = 0;
 
-	this->cont.clear();
-	while (i < this->input.size()){
-		if (isdigit((unsigned char) this->input[i])|| this->input[i] == '+'){
-			this->cont.push_back(getValue(&i));
-			continue ;
-		}
-		if (isspace((unsigned char) this->input[i])){
-			i++;
-			continue;
-		}
-		else
-			throw (PMergeMe::InvalidInputException());
-	}
-}
 
 void 				PMergeMe::formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit){
-	size_t								i = 0;
-	int									min;
-	int									max;
+	size_t	i = 0;
+	int		min;
+	int		max;
+	
 	
 	pairs.clear();
 	while (i + 1 < limit){
@@ -130,25 +114,7 @@ void 				PMergeMe::formPairsVect(std::vector<std::pair<int, int> > &pairs, size_
 	}
 }
 
-void				PMergeMe::formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit){
-	size_t								i = 0;
-	int									min;
-	int									max;
-	
-	pairs.clear();
-	while (i + 1 < limit){
-		if (this->cont[i] < this->cont[i + 1]){
-			min = this->cont[i];
-			max	= this->cont[i + 1];
-		}
-		else {
-			max = this->cont[i];
-			min	= this->cont[i + 1];
-		}
-		pairs.push_back(std::pair<int, int>(min, max)); //to avoid <utility> , i use constructor
-		i += 2;
-	}
-}
+
 
 double				PMergeMe::runVectorPipelineUs(){
 	struct timeval	start;
@@ -161,16 +127,7 @@ double				PMergeMe::runVectorPipelineUs(){
 	return ((end.tv_sec - start.tv_sec) * 1e6 + (end.tv_usec - start.tv_usec));
 }
 
-double				PMergeMe::runDequePipelineUs(){
-	struct timeval	start;
-	struct timeval	end;
-	
-	gettimeofday(&start, NULL);
-	fillDeque();
-	sortDeque();
-	gettimeofday(&end, NULL);
-	return ((end.tv_sec - start.tv_sec) * 1e6 + (end.tv_usec - start.tv_usec));
-}
+
 static void				getMaxes(const std::vector <std::pair<int, int> > &pairs, std::vector <int> &maxes){
 	maxes.clear();
 	maxes.reserve(pairs.size());
@@ -237,6 +194,58 @@ static size_t lower_bound_upto_vector(const std::vector<int> &vect, size_t lo, s
 	return (lo);
 }
 
+void				one(std::vector<int> &result, std::vector<size_t> &order, std::vector<int> &mins, std::vector<size_t> &pos){
+	size_t	pidx;
+	int		val;
+	size_t	hi;
+	size_t	ins;
+
+	for (size_t oi = 0; oi < order.size(); ++oi){
+		pidx = order[oi];
+		val  = mins[pidx];
+		hi   = pos[pidx];
+		ins  = lower_bound_upto_vector(result, 0, hi, val);
+		result.insert(result.begin() + ins, val);
+		for (size_t k = 0; k < pos.size(); ++k) {
+			if (pos[k] >= ins) pos[k]++;
+    	}
+	}
+}
+void 				placeStraggler(std::vector<int> &result, int straggler){
+	result.insert(result.begin() + lower_bound_upto_vector(result, 0, result.size(), straggler), straggler);
+}
+
+void				two(std::vector<size_t>	&order, const std::vector<size_t> &jackobstahl, size_t pairsSize){
+	size_t	l;
+	size_t	r;
+	long	index;
+
+	if (pairsSize == 0)
+		return ;
+	for (size_t m = 2; m < jackobstahl.size(); ++m){
+		l = jackobstahl[m - 1];
+		r = jackobstahl[m] - 1;
+		if (l >= pairsSize)
+			break ;
+		if (r >= pairsSize)
+			r = pairsSize - 1;
+		for (index = static_cast<long>(r); index >= static_cast<long>(l); --index){
+			if (index == 0)
+				continue ;
+			order.push_back(static_cast<size_t>(index));
+		}
+	}
+}
+
+bool				PMergeMe::stragglerCheck(size_t *limit, int *straggler){
+	if (this->vect.size() % 2 == 1){
+		(*straggler) = vect.back();
+		(*limit)--;
+		return (true);
+	}
+	return (false);
+}
+
 void				PMergeMe::sortVect(){
 	std::vector<std::pair<int, int> >	pairs;
 	std::vector<int>					result;
@@ -251,11 +260,7 @@ void				PMergeMe::sortVect(){
 	int									straggler;
 	bool								hasStraggler = false;
 	
-	if (this->vect.size() % 2 == 1){
-		hasStraggler = true;
-		straggler = vect.back();
-		limit--;
-	}
+	hasStraggler = this->stragglerCheck(&limit, &straggler);
 	formPairsVect(pairs, limit);
 	getMaxes(pairs, maxes);
 	getMins(pairs, mins);
@@ -279,39 +284,65 @@ void				PMergeMe::sortVect(){
 	}
 	if (pairsSize > 0)
 		order.push_back(0);
-	for (size_t k = 2; k < jackobstahl.size(); ++k){
-		size_t	l = jackobstahl[k - 1];
-		size_t	r = jackobstahl[k] - 1;
-		if (l >= pairsSize)
-			break;
-		if (r >= pairsSize)
-			r = pairsSize - 1;
-		for (long index = static_cast<long>(r); index >= static_cast<long>(l); --index){
-			if (index == 0)
-				continue ;
-			order.push_back(static_cast<size_t>(index));
-		}
-	}
-	for (size_t oi = 0; oi < order.size(); ++oi){
-		size_t pidx = order[oi];
-		int    val  = mins[pidx];
-		size_t hi   = pos[pidx];
-		size_t ins  = lower_bound_upto_vector(result, 0, hi, val);
-
-		result.insert(result.begin() + ins, val);
-
-		for (size_t k = 0; k < pos.size(); ++k) {
-			if (pos[k] >= ins) pos[k]++;
-    	}
-	}
-	if (hasStraggler) {
-		size_t ins = lower_bound_upto_vector(result, 0, result.size(), straggler);
-		result.insert(result.begin() + ins, straggler);
-	}
-	this->vect = result;
+	two(order, jackobstahl, pairsSize);
+	one(result, order, mins, pos);
+	if (hasStraggler)
+		placeStraggler(result, straggler);
+	this->resVector = result;
 }
 
+//////////////////////////////////////////////////
+//////////////////////DEQUE///////////////////////
+//////////////////////////////////////////////////
 
+void				PMergeMe::formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit){
+	size_t	i = 0;
+	int		min;
+	int		max;
+	
+	pairs.clear();
+	while (i + 1 < limit){
+		if (this->cont[i] < this->cont[i + 1]){
+			min = this->cont[i];
+			max	= this->cont[i + 1];
+		}
+		else {
+			max = this->cont[i];
+			min	= this->cont[i + 1];
+		}
+		pairs.push_back(std::pair<int, int>(min, max)); //to avoid <utility> , i use constructor
+		i += 2;
+	}
+}
+
+double				PMergeMe::runDequePipelineUs(){
+	struct timeval	start;
+	struct timeval	end;
+	
+	gettimeofday(&start, NULL);
+	fillDeque();
+	sortDeque();
+	gettimeofday(&end, NULL);
+	return ((end.tv_sec - start.tv_sec) * 1e6 + (end.tv_usec - start.tv_usec));
+}
+
+void				PMergeMe::fillDeque(){
+	size_t	i = 0;
+
+	this->cont.clear();
+	while (i < this->input.size()){
+		if (isdigit((unsigned char) this->input[i])|| this->input[i] == '+'){
+			this->cont.push_back(getValue(&i));
+			continue ;
+		}
+		if (isspace((unsigned char) this->input[i])){
+			i++;
+			continue;
+		}
+		else
+			throw (PMergeMe::InvalidInputException());
+	}
+}
 
 void				PMergeMe::sortDeque(){
 	
