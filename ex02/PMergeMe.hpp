@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 10:58:13 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 10:59:31 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,4 @@ class PMergeMe{
 			public :
 				virtual const char *what() const throw();
 		};
-		
 };

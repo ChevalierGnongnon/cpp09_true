@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/29 16:38:27 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:02:14 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,11 @@ int PMergeMe::getValue(size_t *i) {
 	return (static_cast<int>(value));
 }
 
+
+//////////////////////////////////////////////////
+//////////////////////VECTOR//////////////////////
+//////////////////////////////////////////////////
+
 void				PMergeMe::fillVector(){
 	size_t	i = 0;
 
@@ -105,7 +110,7 @@ void				PMergeMe::fillDeque(){
 	}
 }
 
-void PMergeMe::formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit){
+void 				PMergeMe::formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit){
 	size_t								i = 0;
 	int									min;
 	int									max;
