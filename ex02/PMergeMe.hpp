@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 15:02:34 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 16:11:53 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ class PMergeMe{
 		PMergeMe(const PMergeMe	&src);
 		PMergeMe &operator=(const PMergeMe &src);
 		~PMergeMe();
+		
+		std::vector<int>	&getVect();
+		std::vector<int>	&getResVect();
+		std::deque<int>		&getCont();
+		std::deque<int>		&getResDeque();
+		std::string			&getInput();
 		
 		int 				getValue(size_t *i);
 		
