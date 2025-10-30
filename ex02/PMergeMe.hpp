@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 16:11:53 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 16:26:08 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,18 @@
 # include <vector>
 # include <deque>
 # include <cctype>
+# include <utility>
 # include <limits.h>
 # include <sys/time.h>
 
 
 class PMergeMe{
 	private :
-		std::vector<int>	vect;
-		std::vector<int>	resVector;
-		std::deque<int>		cont;
-		std::deque<int>		resDeque;
-		std::string			input;
+		std::vector<int>		vect;
+		std::vector<int>		resVector;
+		std::deque<int>			cont;
+		std::deque<int>			resDeque;
+		std::string				input;
 		
 	public :
 		PMergeMe();
@@ -35,28 +36,28 @@ class PMergeMe{
 		PMergeMe &operator=(const PMergeMe &src);
 		~PMergeMe();
 		
-		std::vector<int>	&getVect();
-		std::vector<int>	&getResVect();
-		std::deque<int>		&getCont();
-		std::deque<int>		&getResDeque();
-		std::string			&getInput();
+		const std::vector<int>	&getVect();
+		const std::vector<int>	&getResVect();
+		const std::deque<int>	&getCont();
+		const std::deque<int>	&getResDeque();
+		const std::string		&getInput();
 		
-		int 				getValue(size_t *i);
+		int 					getValue(size_t *i);
 		
-		void				fillVector();
-		void				fillDeque();
-		
-		void				formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit);
-		void				formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit);
+		void					fillVector();
+		void					fillDeque();
+			
+		void					formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit);
+		void					formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit);
 				
-		void				sortVect();
-		void				sortDeque();
+		void					sortVect();
+		void					sortDeque();
 
-		double				runVectorPipelineUs();
-		double				runDequePipelineUs();
+		double					runVectorPipelineUs();
+		double					runDequePipelineUs();
 
-		bool				stragglerCheckVector(size_t *limit, int *straggler);
-		bool				stragglerCheckDeque(size_t *limit, int *straggler);
+		bool					stragglerCheckVector(size_t *limit, int *straggler);
+		bool					stragglerCheckDeque(size_t *limit, int *straggler);
 		
 		class InvalidInputException : public std::exception{
 			public :
