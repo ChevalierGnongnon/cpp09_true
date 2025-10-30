@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 15:03:31 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 16:03:46 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ PMergeMe::~PMergeMe(){
 	
 }
 
-int PMergeMe::getValue(size_t *i) {
+int 			PMergeMe::getValue(size_t *i) {
 	std::string strValue;
 	size_t start;
 	long value = 0;
@@ -128,14 +128,14 @@ double				PMergeMe::runVectorPipelineUs(){
 }
 
 
-static void				getMaxesVector(const std::vector <std::pair<int, int> > &pairs, std::vector <int> &maxes){
+static void			getMaxesVector(const std::vector <std::pair<int, int> > &pairs, std::vector <int> &maxes){
 	maxes.clear();
 	maxes.reserve(pairs.size());
 	for (size_t i = 0; i < pairs.size(); i++){
 		maxes.push_back(pairs[i].second);
 	}
 }
-static void				getMinsVector(const std::vector<std::pair<int, int> > &pairs, std::vector<int> &mins){
+static void			getMinsVector(const std::vector<std::pair<int, int> > &pairs, std::vector<int> &mins){
 	mins.clear();
 	mins.reserve(pairs.size());
 	for (size_t i = 0; i < pairs.size(); i++){
@@ -169,7 +169,6 @@ std::vector<size_t>	makeJacobsthalVector(size_t size){
 	std::vector<size_t>	j;
 	size_t				next;
 
-	
 	j.push_back(0);
 	j.push_back(1);
 	if (size <= 1)
@@ -183,9 +182,11 @@ std::vector<size_t>	makeJacobsthalVector(size_t size){
 	return (j);
 }
 
-static size_t lower_bound_upto_vector(const std::vector<int> &vect, size_t lo, size_t hi, int v){
+static size_t 		lower_bound_upto_vector(const std::vector<int> &vect, size_t lo, size_t hi, int v){
+	size_t	mid;
+	
 	while (lo < hi){
-		size_t mid = lo + (hi -lo) / 2;
+		mid = lo + (hi -lo) / 2;
 		if (vect[mid] < v)
 			lo = mid + 1;
 		else
@@ -196,9 +197,9 @@ static size_t lower_bound_upto_vector(const std::vector<int> &vect, size_t lo, s
 
 void				one(std::vector<int> &result, std::vector<size_t> &order, std::vector<int> &mins, std::vector<size_t> &pos){
 	size_t	pidx;
-	int		val;
 	size_t	hi;
 	size_t	ins;
+	int		val;
 
 	for (size_t oi = 0; oi < order.size(); ++oi){
 		pidx = order[oi];
@@ -211,7 +212,7 @@ void				one(std::vector<int> &result, std::vector<size_t> &order, std::vector<in
     	}
 	}
 }
-void 				placeStraggler(std::vector<int> &result, int straggler){
+void 				placeStragglerVector(std::vector<int> &result, int straggler){
 	result.insert(result.begin() + lower_bound_upto_vector(result, 0, result.size(), straggler), straggler);
 }
 
@@ -287,7 +288,7 @@ void				PMergeMe::sortVect(){
 	two(order, jackobstahl, pairsSize);
 	one(result, order, mins, pos);
 	if (hasStraggler)
-		placeStraggler(result, straggler);
+		placeStragglerVector(result, straggler);
 	this->resVector = result;
 }
 
@@ -395,7 +396,7 @@ std::deque<size_t>	makeJacobsthalDeque(size_t size){
 	return (j);
 }
 
-static size_t lower_bound_upto_deque(const std::deque<int> &vect, size_t lo, size_t hi, int v){
+static size_t		lower_bound_upto_deque(const std::deque<int> &vect, size_t lo, size_t hi, int v){
 	size_t mid;
 	
 	while (lo < hi){
@@ -410,9 +411,9 @@ static size_t lower_bound_upto_deque(const std::deque<int> &vect, size_t lo, siz
 
 void				one(std::deque<int> &result, std::deque<size_t> &order, std::deque<int> &mins, std::deque<size_t> &pos){
 	size_t	pidx;
-	int		val;
 	size_t	hi;
 	size_t	ins;
+	int		val;
 
 	for (size_t oi = 0; oi < order.size(); ++oi){
 		pidx = order[oi];
@@ -424,9 +425,6 @@ void				one(std::deque<int> &result, std::deque<size_t> &order, std::deque<int> 
 			if (pos[k] >= ins) pos[k]++;
     	}
 	}
-}
-void 				placeStraggler(std::deque<int> &result, int straggler){
-	result.insert(result.begin() + lower_bound_upto_deque(result, 0, result.size(), straggler), straggler);
 }
 
 void				two(std::deque<size_t>	&order, const std::deque<size_t> &jackobstahl, size_t pairsSize){
@@ -460,7 +458,53 @@ bool				PMergeMe::stragglerCheckDeque(size_t *limit, int *straggler){
 	return (false);
 }
 
+void 				placeStragglerDeque(std::deque<int> &result, int straggler){
+	result.insert(result.begin() + lower_bound_upto_deque(result, 0, result.size(), straggler), straggler);
+}
+
+
 void				PMergeMe::sortDeque(){
+	std::deque<std::pair<int, int> >	pairs;
+	std::deque<int>						result;
+	std::deque<int>						maxes;
+	std::deque<size_t>					keys;
+	std::deque <int>					mins;
+	std::deque<size_t>					jackobstahl;
+	size_t								limit = this->cont.size();
+	size_t								pairsSize;
+	std::deque<size_t>					pos;
+	std::deque<size_t>					order;
+	int									straggler;
+	bool								hasStraggler = false;
 	
+	hasStraggler = this->stragglerCheckDeque(&limit, &straggler);
+	formPairsDeque(pairs, limit);
+	getMaxesDeque(pairs, maxes);
+	getMinsDeque(pairs, mins);
+	keys.clear();
+	for (size_t j = 0; j < pairs.size(); j++)
+		keys.push_back(j);
+	insertionSortDeque(maxes, keys);
+	pairsSize = keys.size();
+	if (keys.size() == 0 && hasStraggler){
+		result.push_back(straggler);
+		return ;
+	}
+	else if (keys.size() == 0 && !hasStraggler)
+		return ;
+	result = maxes;
+	jackobstahl = makeJacobsthalDeque(pairsSize);
+	pos.resize(keys.size());
+	for (size_t k = 0; k < keys.size(); k++){
+		size_t p = keys[k];
+		pos[p] = k;
+	}
+	if (pairsSize > 0)
+		order.push_back(0);
+	two(order, jackobstahl, pairsSize);
+	one(result, order, mins, pos);
+	if (hasStraggler)
+		placeStragglerDeque(result, straggler);
+	this->resDeque = result;
 }
 
