@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 14:30:48 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 15:03:31 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ void				two(std::vector<size_t>	&order, const std::vector<size_t> &jackobstahl, 
 	}
 }
 
-bool				PMergeMe::stragglerCheck(size_t *limit, int *straggler){
+bool				PMergeMe::stragglerCheckVector(size_t *limit, int *straggler){
 	if (this->vect.size() % 2 == 1){
 		(*straggler) = vect.back();
 		(*limit)--;
@@ -260,7 +260,7 @@ void				PMergeMe::sortVect(){
 	int									straggler;
 	bool								hasStraggler = false;
 	
-	hasStraggler = this->stragglerCheck(&limit, &straggler);
+	hasStraggler = this->stragglerCheckVector(&limit, &straggler);
 	formPairsVect(pairs, limit);
 	getMaxesVector(pairs, maxes);
 	getMinsVector(pairs, mins);
@@ -344,13 +344,13 @@ void				PMergeMe::fillDeque(){
 	}
 }
 
-void				getMinsDeque(std::deque<std::pair<int, int> > &pairs, std::deque<int> &mins){
+void				getMinsDeque(const std::deque<std::pair<int, int> > &pairs, std::deque<int> &mins){
 	mins.clear();
 	for (size_t i = 0; i < pairs.size(); i++)
 		mins.push_back(pairs[i].first);
 }
 
-void				getMaxesDeque(std::deque<std::pair<int, int> > &pairs, std::deque<int> &maxes){
+void				getMaxesDeque(const std::deque<std::pair<int, int> > &pairs, std::deque<int> &maxes){
 	maxes.clear();
 	for (size_t i = 0; i < pairs.size(); i++)
 		maxes.push_back(pairs[i].second);
@@ -406,6 +406,58 @@ static size_t lower_bound_upto_deque(const std::deque<int> &vect, size_t lo, siz
 			hi = mid;
 	}	
 	return (lo);
+}
+
+void				one(std::deque<int> &result, std::deque<size_t> &order, std::deque<int> &mins, std::deque<size_t> &pos){
+	size_t	pidx;
+	int		val;
+	size_t	hi;
+	size_t	ins;
+
+	for (size_t oi = 0; oi < order.size(); ++oi){
+		pidx = order[oi];
+		val  = mins[pidx];
+		hi   = pos[pidx];
+		ins  = lower_bound_upto_deque(result, 0, hi, val);
+		result.insert(result.begin() + ins, val);
+		for (size_t k = 0; k < pos.size(); ++k) {
+			if (pos[k] >= ins) pos[k]++;
+    	}
+	}
+}
+void 				placeStraggler(std::deque<int> &result, int straggler){
+	result.insert(result.begin() + lower_bound_upto_deque(result, 0, result.size(), straggler), straggler);
+}
+
+void				two(std::deque<size_t>	&order, const std::deque<size_t> &jackobstahl, size_t pairsSize){
+	size_t	l;
+	size_t	r;
+	long	index;
+
+	if (pairsSize == 0)
+		return ;
+	for (size_t m = 2; m < jackobstahl.size(); ++m){
+		l = jackobstahl[m - 1];
+		r = jackobstahl[m] - 1;
+		if (l >= pairsSize)
+			break ;
+		if (r >= pairsSize)
+			r = pairsSize - 1;
+		for (index = static_cast<long>(r); index >= static_cast<long>(l); --index){
+			if (index == 0)
+				continue ;
+			order.push_back(static_cast<size_t>(index));
+		}
+	}
+}
+
+bool				PMergeMe::stragglerCheckDeque(size_t *limit, int *straggler){
+	if (this->cont.size() % 2 == 1){
+		(*straggler) = cont.back();
+		(*limit)--;
+		return (true);
+	}
+	return (false);
 }
 
 void				PMergeMe::sortDeque(){

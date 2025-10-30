@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 12:54:14 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 15:02:34 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ class PMergeMe{
 		double				runVectorPipelineUs();
 		double				runDequePipelineUs();
 
-		bool				stragglerCheck(size_t *limit, int *straggler);
+		bool				stragglerCheckVector(size_t *limit, int *straggler);
+		bool				stragglerCheckDeque(size_t *limit, int *straggler);
 		
 		class InvalidInputException : public std::exception{
 			public :
