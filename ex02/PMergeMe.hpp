@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 16:26:08 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 17:00:34 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <deque>
 # include <cctype>
 # include <utility>
+# include <exception>
+# include <string>
 # include <limits.h>
 # include <sys/time.h>
 
@@ -36,11 +38,11 @@ class PMergeMe{
 		PMergeMe &operator=(const PMergeMe &src);
 		~PMergeMe();
 		
-		const std::vector<int>	&getVect();
-		const std::vector<int>	&getResVect();
-		const std::deque<int>	&getCont();
-		const std::deque<int>	&getResDeque();
-		const std::string		&getInput();
+		const std::vector<int>	&getVect() const;
+		const std::vector<int>	&getResVect() const;
+		const std::deque<int>	&getCont() const;
+		const std::deque<int>	&getResDeque() const;
+		const std::string		&getInput() const;
 		
 		int 					getValue(size_t *i);
 		

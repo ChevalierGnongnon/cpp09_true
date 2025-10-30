@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 16:26:59 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 16:54:07 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,24 @@ PMergeMe::~PMergeMe(){
 	
 }
 
-const std::vector<int>		&PMergeMe::getVect(){
+const std::vector<int>		&PMergeMe::getVect() const{
 	return (this->vect);
 }
-const std::vector<int>		&PMergeMe::getResVect(){
+const std::vector<int>		&PMergeMe::getResVect() const{
 	return (this->resVector);
 }
-const std::deque<int>		&PMergeMe::getCont(){
+const std::deque<int>		&PMergeMe::getCont() const{
 	return (this->cont);
 }
-const std::deque<int>		&PMergeMe::getResDeque(){
+const std::deque<int>		&PMergeMe::getResDeque()const{
 	return (this->resDeque);
 }
-const std::string			&PMergeMe::getInput(){
+const std::string			&PMergeMe::getInput()const{
 	return (this->input);
+}
+
+const char* PMergeMe::InvalidInputException::what() const throw() {
+    return ("Error");
 }
 
 int 			PMergeMe::getValue(size_t *i) {
@@ -211,7 +215,7 @@ static size_t 		lower_bound_upto_vector(const std::vector<int> &vect, size_t lo,
 	return (lo);
 }
 
-void				one(std::vector<int> &result, std::vector<size_t> &order, std::vector<int> &mins, std::vector<size_t> &pos){
+void				insertMinsByJacobsthalOrderVector(std::vector<int> &result, std::vector<size_t> &order, std::vector<int> &mins, std::vector<size_t> &pos){
 	size_t	pidx;
 	size_t	hi;
 	size_t	ins;
@@ -232,7 +236,7 @@ void 				placeStragglerVector(std::vector<int> &result, int straggler){
 	result.insert(result.begin() + lower_bound_upto_vector(result, 0, result.size(), straggler), straggler);
 }
 
-void				two(std::vector<size_t>	&order, const std::vector<size_t> &jackobstahl, size_t pairsSize){
+void				buildJacobsthalInsertionOrderVector(std::vector<size_t>	&order, const std::vector<size_t> &jackobstahl, size_t pairsSize){
 	size_t	l;
 	size_t	r;
 	long	index;
@@ -301,8 +305,8 @@ void				PMergeMe::sortVect(){
 	}
 	if (pairsSize > 0)
 		order.push_back(0);
-	two(order, jackobstahl, pairsSize);
-	one(result, order, mins, pos);
+	buildJacobsthalInsertionOrderVector(order, jackobstahl, pairsSize);
+	insertMinsByJacobsthalOrderVector(result, order, mins, pos);
 	if (hasStraggler)
 		placeStragglerVector(result, straggler);
 	this->resVector = result;
@@ -425,7 +429,7 @@ static size_t		lower_bound_upto_deque(const std::deque<int> &vect, size_t lo, si
 	return (lo);
 }
 
-void				one(std::deque<int> &result, std::deque<size_t> &order, std::deque<int> &mins, std::deque<size_t> &pos){
+void				insertMinsByJacobsthalOrderDeque(std::deque<int> &result, std::deque<size_t> &order, std::deque<int> &mins, std::deque<size_t> &pos){
 	size_t	pidx;
 	size_t	hi;
 	size_t	ins;
@@ -443,7 +447,7 @@ void				one(std::deque<int> &result, std::deque<size_t> &order, std::deque<int> 
 	}
 }
 
-void				two(std::deque<size_t>	&order, const std::deque<size_t> &jackobstahl, size_t pairsSize){
+void				buildJacobsthalInsertionOrderDeque(std::deque<size_t>	&order, const std::deque<size_t> &jackobstahl, size_t pairsSize){
 	size_t	l;
 	size_t	r;
 	long	index;
@@ -517,8 +521,8 @@ void				PMergeMe::sortDeque(){
 	}
 	if (pairsSize > 0)
 		order.push_back(0);
-	two(order, jackobstahl, pairsSize);
-	one(result, order, mins, pos);
+	buildJacobsthalInsertionOrderDeque(order, jackobstahl, pairsSize);
+	insertMinsByJacobsthalOrderDeque(result, order, mins, pos);
 	if (hasStraggler)
 		placeStragglerDeque(result, straggler);
 	this->resDeque = result;
