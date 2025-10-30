@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 13:54:57 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:30:48 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,14 +128,14 @@ double				PMergeMe::runVectorPipelineUs(){
 }
 
 
-static void				getMaxes(const std::vector <std::pair<int, int> > &pairs, std::vector <int> &maxes){
+static void				getMaxesVector(const std::vector <std::pair<int, int> > &pairs, std::vector <int> &maxes){
 	maxes.clear();
 	maxes.reserve(pairs.size());
 	for (size_t i = 0; i < pairs.size(); i++){
 		maxes.push_back(pairs[i].second);
 	}
 }
-static void				getMins(const std::vector<std::pair<int, int> > &pairs, std::vector<int> &mins){
+static void				getMinsVector(const std::vector<std::pair<int, int> > &pairs, std::vector<int> &mins){
 	mins.clear();
 	mins.reserve(pairs.size());
 	for (size_t i = 0; i < pairs.size(); i++){
@@ -143,7 +143,7 @@ static void				getMins(const std::vector<std::pair<int, int> > &pairs, std::vect
 	}
 }
 
-static void			insertionSort(std::vector<int> &base, std::vector<size_t> &keys){
+static void			insertionSortVector(std::vector<int> &base, std::vector<size_t> &keys){
 	size_t	i = 1;
 	size_t	j;
 	size_t	key;
@@ -165,7 +165,7 @@ static void			insertionSort(std::vector<int> &base, std::vector<size_t> &keys){
 	}
 }
 
-std::vector<size_t>	makeJacobsthal(size_t size){
+std::vector<size_t>	makeJacobsthalVector(size_t size){
 	std::vector<size_t>	j;
 	size_t				next;
 
@@ -262,12 +262,12 @@ void				PMergeMe::sortVect(){
 	
 	hasStraggler = this->stragglerCheck(&limit, &straggler);
 	formPairsVect(pairs, limit);
-	getMaxes(pairs, maxes);
-	getMins(pairs, mins);
+	getMaxesVector(pairs, maxes);
+	getMinsVector(pairs, mins);
 	keys.clear();
 	for (size_t j = 0; j < pairs.size(); j++)
 		keys.push_back(j);
-	insertionSort(maxes, keys);
+	insertionSortVector(maxes, keys);
 	pairsSize = keys.size();
 	if (keys.size() == 0 && hasStraggler){
 		result.push_back(straggler);
@@ -276,7 +276,7 @@ void				PMergeMe::sortVect(){
 	else if (keys.size() == 0 && !hasStraggler)
 		return ;
 	result = maxes;
-	jackobstahl = makeJacobsthal(pairsSize);
+	jackobstahl = makeJacobsthalVector(pairsSize);
 	pos.resize(keys.size());
 	for (size_t k = 0; k < keys.size(); k++){
 		size_t p = keys[k];
@@ -342,6 +342,70 @@ void				PMergeMe::fillDeque(){
 		else
 			throw (PMergeMe::InvalidInputException());
 	}
+}
+
+void				getMinsDeque(std::deque<std::pair<int, int> > &pairs, std::deque<int> &mins){
+	mins.clear();
+	for (size_t i = 0; i < pairs.size(); i++)
+		mins.push_back(pairs[i].first);
+}
+
+void				getMaxesDeque(std::deque<std::pair<int, int> > &pairs, std::deque<int> &maxes){
+	maxes.clear();
+	for (size_t i = 0; i < pairs.size(); i++)
+		maxes.push_back(pairs[i].second);
+}
+
+static void			insertionSortDeque(std::deque<int> &base, std::deque<size_t> &keys){
+	size_t	i = 1;
+	size_t	j;
+	size_t	key;
+	int		val;
+	
+	if (base.empty() || keys.size() != base.size())
+   		return;
+	for (i; i < base.size(); ++i){
+		val = base[i];
+		key = keys[i];
+		j = i;
+		while (j > 0 && base[j - 1] > val){
+			base[j] = base[j - 1];
+			keys[j] = keys[j - 1];
+			--j;
+		}
+		base[j] = val;
+		keys[j] = key;
+	}
+}
+
+std::deque<size_t>	makeJacobsthalDeque(size_t size){
+	std::deque<size_t>	j;
+	size_t				next;
+
+	j.push_back(0);
+	j.push_back(1);
+	if (size <= 1)
+		return (j);
+	while (true){
+		next = j[j.size() - 1] + (2 * j[j.size() - 2]);
+		j.push_back(next);
+		if (next >= size)
+			break;
+	}
+	return (j);
+}
+
+static size_t lower_bound_upto_deque(const std::deque<int> &vect, size_t lo, size_t hi, int v){
+	size_t mid;
+	
+	while (lo < hi){
+		mid = lo + (hi -lo) / 2;
+		if (vect[mid] < v)
+			lo = mid + 1;
+		else
+			hi = mid;
+	}	
+	return (lo);
 }
 
 void				PMergeMe::sortDeque(){
