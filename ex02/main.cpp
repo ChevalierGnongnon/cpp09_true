@@ -6,7 +6,14 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:40 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/15 14:08:41 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/30 10:55:48 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "PMergeMe.hpp"
+
+int main(int argc, char **argv){
+	if (argc == 2){
+		PMergeMe(argv[1]);
+	}
+}
