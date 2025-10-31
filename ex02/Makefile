@@ -6,14 +6,14 @@
 #    By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/15 14:08:34 by chhoflac          #+#    #+#              #
-#    Updated: 2025/10/31 16:46:28 by chhoflac         ###   ########.fr        #
+#    Updated: 2025/10/31 16:48:56 by chhoflac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = RPN
 
 SOURCES = main.cpp \
-		PmergeMe.cpp
+		PMergeMe.cpp
 		
 OBJS = $(SOURCES:.cpp=.o)
 

@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 16:25:39 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 16:50:19 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ static void			insertionSortVector(std::vector<int> &base, std::vector<size_t> &k
 	
 	if (base.empty() || keys.size() != base.size())
    		return;
-	for (i; i < base.size(); ++i){
+	for (; i < base.size(); ++i){
 		val = base[i];
 		key = keys[i];
 		j = i;
@@ -400,7 +400,7 @@ static void			insertionSortDeque(std::deque<int> &base, std::deque<size_t> &keys
 	
 	if (base.empty() || keys.size() != base.size())
    		return;
-	for (i; i < base.size(); ++i){
+	for (; i < base.size(); ++i){
 		val = base[i];
 		key = keys[i];
 		j = i;
