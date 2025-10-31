@@ -1,0 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   TooLargeNumberException.hpp                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/31 11:15:57 by chhoflac          #+#    #+#             */
+/*   Updated: 2025/10/31 11:16:33 by chhoflac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "BitcoinExchange.hpp"
+
+class TooLargeNumberException : public std::exception{
+	private :
+		const std::string	line;
+		std::string			message;
+		int					lineNumber;
+	public :
+		TooLargeNumberException(const std::string &line, int lineNumber);
+		virtual const char *what() const throw();
+};

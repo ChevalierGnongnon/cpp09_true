@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 11:12:41 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 11:20:15 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,37 +42,6 @@ class BitcoinExchange{
 		bool 			checkIsNum(const std::string &value);
 		bool 			checkIsValidFloat(const std::string &value);
 		std::string		cutSpaces(const std::string &tmp);
-
-		
-		class BadInputException : public std::exception{
-			private :
-				const std::string	line;
-				std::string			message;
-				int					lineNumber;
-			public :
-				BadInputException(const std::string &line, int lineNumber);
-				virtual const char *what() const throw();
-		};
-		
-		class NotPositiveException : public std::exception{
-			private :
-				const std::string	line;
-				std::string			message;
-				int					lineNumber;
-			public :
-				NotPositiveException(const std::string &line, int lineNumber);
-				virtual const char *what() const throw();
-		};
-
-		class TooLargeNumberException : public std::exception{
-			private :
-				const std::string	line;
-				std::string			message;
-				int					lineNumber;
-			public :
-				TooLargeNumberException(const std::string &line, int lineNumber);
-				virtual const char *what() const throw();
-		};
 
 		Date 			parseDate(const std::string &line);
 		void			parseLine(std::multimap<Date, float> &target, const std::string &line, char sep, int lineNumber);
