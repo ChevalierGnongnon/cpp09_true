@@ -6,11 +6,13 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 11:26:46 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 11:27:28 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 11:46:14 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "BitcoinExchange.hpp"
+#pragma once
+# include <exception>
+# include <string>
 
 class BadInputException : public std::exception{
 	private :
