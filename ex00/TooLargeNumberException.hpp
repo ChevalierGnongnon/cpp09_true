@@ -6,10 +6,11 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 11:15:57 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 14:30:02 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:36:59 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include "BitcoinExchange.hpp"
 
 class TooLargeNumberException : public std::exception{

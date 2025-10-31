@@ -6,10 +6,11 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 11:17:13 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 14:30:12 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:36:45 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include "BitcoinExchange.hpp"
 
 class NotPositiveException : public std::exception{

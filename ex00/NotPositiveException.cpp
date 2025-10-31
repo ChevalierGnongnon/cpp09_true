@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 11:48:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 14:23:09 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:36:40 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 NotPositiveException::NotPositiveException(const std::string &line, int lineNumber): line(line), lineNumber(lineNumber){
 	std::ostringstream oss;
-	oss << "Error: Value is not positive on line : " << lineNumber << ": " << line;
+	oss << "Error: Value is not positive on line : " << this->lineNumber << ": " << line;
 	message = oss.str();
 }
 

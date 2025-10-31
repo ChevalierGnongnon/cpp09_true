@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 11:31:29 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 14:19:54 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:36:27 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 BadInputException::BadInputException(const std::string &line, int lineNumber): line(line), lineNumber(lineNumber){
 	std::ostringstream oss;
-	oss << "Error: bad input on line : " << lineNumber << ": " << line;
+	oss << "Error: bad input on line : " << this->lineNumber << ": " << line;
 	message = oss.str();
 }
 
