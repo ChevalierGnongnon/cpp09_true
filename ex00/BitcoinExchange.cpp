@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 12:35:07 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 13:49:32 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,16 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src){
 }
 
 void BitcoinExchange::loadData(std::multimap<Date, float> &target, std::fstream &file, char sep){
-    std::string                     line;
-    int                             lineNumber = 1;
-    
-    while (std::getline(file, line)){
-        parseLine(target, line, sep, lineNumber);
-        lineNumber++;
+    std::string line;
+    int         lineNumber = 1;
+
+    while (std::getline(file, line)) {
+        try {
+            parseLine(target, line, sep, lineNumber);
+        } catch (const std::exception &e) {
+            std::cerr << e.what() << std::endl;
+        } 
+        ++lineNumber;
     }
 }
 
