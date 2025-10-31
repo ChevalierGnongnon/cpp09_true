@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 11:31:29 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 11:59:34 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:19:54 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ BadInputException::BadInputException(const std::string &line, int lineNumber): l
 	oss << "Error: bad input on line : " << lineNumber << ": " << line;
 	message = oss.str();
 }
+
+BadInputException::~BadInputException() throw(){}
+
+
 const char *BadInputException::what() const throw(){
 	return (message.c_str());
 }
