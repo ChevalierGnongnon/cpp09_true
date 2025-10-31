@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:39:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/13 15:46:03 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:24:53 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ const char				*RPN::DivisionByZeroException::what() const throw(){
 }
 
 const char				*RPN::NoDigitsException::what() const throw(){
-	return ("Error : No digits in this expression.");
+	return ("Error : No digits / no operands in this expression.");
 }
 
 const char				*RPN::NoOperatorException::what() const throw(){
