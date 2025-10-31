@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/30 17:00:34 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 16:31:58 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ class PMergeMe{
 		const std::deque<int>	&getCont() const;
 		const std::deque<int>	&getResDeque() const;
 		const std::string		&getInput() const;
+
+		void					showResVector() const;
+		void					showResDeque() const;
 		
 		int 					getValue(size_t *i);
 		
