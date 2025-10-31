@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/07 14:26:31 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 11:21:12 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,18 +120,6 @@ Date BitcoinExchange::parseDate(const std::string &line){
             return (Date(std::atoi(ys.c_str()), std::atoi(ms.c_str()), std::atoi(ds.c_str())));
     }
     return (Date(-1, -1, -1));
-}
-
-void		BitcoinExchange::errorBadInput(const std::string &line, int lineNumber){
-	std::cerr << "Error: bad input => " << line << " (line " << lineNumber << ")" << std::endl;
-}
-
-void		BitcoinExchange::errorNotPositive(const std::string &line, int lineNumber){
-	std::cerr << "Error: not a positive number => " << line << " (line " << lineNumber << ")" << std::endl;
-}
-
-void		BitcoinExchange::errorTooLargeNumber(const std::string &line, int lineNumber){
-	std::cerr << "Error: too large a number => " << line << " (line " << lineNumber << ")" << std::endl;
 }
 
 bool BitcoinExchange::checkIsValidFloat(const std::string &s) {
