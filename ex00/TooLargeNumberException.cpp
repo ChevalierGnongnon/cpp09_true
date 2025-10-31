@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 11:50:19 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 11:59:52 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:29:43 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ TooLargeNumberException::TooLargeNumberException(const std::string &line, int li
 	oss << "Error: Value is too large on line : " << lineNumber << ": " << line;
 	message = oss.str();
 }
+
+TooLargeNumberException::~TooLargeNumberException()throw(){}
+
 const char *TooLargeNumberException::what() const throw(){
 	return (message.c_str());
 }
