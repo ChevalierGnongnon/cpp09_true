@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 11:46:34 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:29:38 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <exception>
 #include <sstream>
 #include "BadInputException.hpp"
+#include "NotPositiveException.hpp"
+#include "TooLargeNumberException.hpp"
 #include "Date.hpp"
 
 class BitcoinExchange{

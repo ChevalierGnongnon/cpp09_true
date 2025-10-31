@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 11:21:12 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:35:07 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,23 +174,23 @@ void		BitcoinExchange::parseLine(std::multimap<Date, float> &target, const std::
 	float		value;
     
     if (sepPos < 1 || sepPos >= (int)line.size() - 1)
-        return (errorBadInput(line, lineNumber));
+        throw (BadInputException(line, lineNumber));
     try{
         tmp = line.substr(0, sepPos);
         dateString = cutSpaces(tmp);
         tmp = "";
     } catch (const std::out_of_range &e){
-        return (errorBadInput(line, lineNumber));
+        throw (BadInputException(line, lineNumber));
 	}
     try{
         tmp = line.substr(sepPos + 1);
         valueString = cutSpaces(tmp);
         tmp = "";
     } catch (const std::out_of_range &e){
-        return (errorBadInput(line, lineNumber));
+        throw (BadInputException(line, lineNumber));
     }
     if (valueString.empty()){
-		return (errorBadInput(line, lineNumber));	
+		throw (BadInputException(line, lineNumber));
 	}
 	if (lineNumber == 1 && sep == '|' && (dateString == "date" || dateString == "Date") && ((valueString == "value" || valueString == "Value"))){
 		return ;
@@ -199,23 +199,23 @@ void		BitcoinExchange::parseLine(std::multimap<Date, float> &target, const std::
 		return ;
 	}
     if (dateString.size() != 10)
-        return (errorBadInput(line, lineNumber));
+        throw (BadInputException(line, lineNumber));
     if (dateString.size() == 10){
         Date newOne = parseDate(dateString);
         if (!newOne.getIsValid())
-            return (errorBadInput(line, lineNumber));
+            throw (BadInputException(line, lineNumber));
 		value = parseValue(valueString);
 		if (value == -1.0f)
-			return (errorBadInput(line, lineNumber));
+            throw (BadInputException(line, lineNumber));
 		if (sep == '|'){
 			if (value < 0.0f)
-				return (errorNotPositive(line, lineNumber));
+				throw (NotPositiveException(line, lineNumber));
 			if (value > 1000.0f)
-				return (errorTooLargeNumber(line, lineNumber));
+				throw (TooLargeNumberException(line, lineNumber));
 		}
 		else {
 			if (value < 0.0f)
-				return (errorBadInput(line, lineNumber));
+				throw (BadInputException(line, lineNumber));
 		}
 		target.insert(std::multimap<Date, float>::value_type(newOne, value));
 	}
