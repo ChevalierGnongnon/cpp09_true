@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/02 16:41:45 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:17:13 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ BitcoinExchange::~BitcoinExchange(){
 	
 }
 
+
+
 BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src){
     if (this != &src){
         this->dataCSV = src.dataCSV;
@@ -36,12 +38,63 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src){
     return (*this);
 }
 
-void BitcoinExchange::loadDataBDD(std::multimap<Date, float> &target, std::fstream &file){
+static std::string formatDate(const Date &d){
+    std::ostringstream oss;
+    oss << d.getYear() << "-" << std::setw(2) << std::setfill('0') << d.getMonth() << "-" << std::setw(2) << std::setfill('0') << d.getDay();
+    return (oss.str());
+}
+
+void BitcoinExchange::loadDataValues(std::multimap<Date, float> &target, std::fstream &file){
     std::string line;
     int         lineNumber = 1;
 
     while (std::getline(file, line)) {
-        parseLine(target, line, ',', lineNumber);
+        try{
+            parseLine(target, line, '|', lineNumber);
+            int sepPos = sepCheck(line, '|');
+            std::string dateString = cutSpaces(line.substr(0, sepPos));
+            std::string valueString = cutSpaces(line.substr(sepPos + 1));
+            if (lineNumber == 1 &&
+                (dateString == "date" || dateString == "Date") &&
+                (valueString == "value" || valueString == "Value")) {
+                    ++lineNumber;
+                    continue;
+            }
+            Date d = parseDate(dateString);
+            float v = parseValue(valueString);
+            float rate = getRate(d);
+            std::cout << formatDate(d) << " => " << v << " = " << (rate * v) << std::endl;
+        } catch (const NotPositiveException &){
+            std::cout << "Error: not a positive number." << std::endl;
+        } catch (const TooLargeNumberException&) {
+            std::cout << "Error: too large a number." << std::endl;
+        } catch (const BadInputException&) {
+            std::cout << "Error: bad input => " << line << std::endl;
+        }
+        catch (const std::exception&) {
+            int sepPos = sepCheck(line, '|');
+            std::string dateString;
+            if (sepPos > 0) 
+                dateString = cutSpaces(line.substr(0, sepPos));
+            else 
+                dateString = "";
+            
+            std::cout << "Error: no earlier rate for " << dateString << std::endl;
+        }
+        ++lineNumber;
+    }
+}
+
+void   BitcoinExchange::loadDataBDD(std::multimap<Date, float> &target, std::fstream &file){
+    std::string line;
+    int         lineNumber = 1;
+    
+    while (std::getline(file, line)) {
+        try{
+            parseLine(target, line, ',', lineNumber);
+        } catch (const std::exception &e){
+            
+        }
         ++lineNumber;
     }
 }
@@ -158,7 +211,7 @@ float		BitcoinExchange::parseValue(const std::string &valueString){
 		return (-1.0f);
 	std::istringstream iss(valueString);
     float v = 0.0f;
-	 iss >> v;
+	iss >> v;
     if (iss.fail())
         return (-1.0f);
     if (!iss.eof())
@@ -221,11 +274,7 @@ void		BitcoinExchange::parseLine(std::multimap<Date, float> &target, const std::
 	}
 }
 
-static std::string formatDate(const Date &d){
-    std::ostringstream oss;
-    oss << d.getYear() << "-" << std::setw(2) << std::setfill('0') << d.getMonth() << "-" << std::setw(2) << std::setfill('0') << d.getDay();
-    return (oss.str());
-}
+
 
 // void	BitcoinExchange::evaluate() const{
 // 	std::multimap<Date, float>::const_iterator	it;
