@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 12:29:38 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/02 12:52:40 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ class BitcoinExchange{
 
 		BitcoinExchange &operator=(const BitcoinExchange &src);
 
-		void			loadData(std::multimap<Date, float> &target, std::fstream &file, char sep);
+		void			loadDataBDD(std::multimap<Date, float> &target, std::fstream &file);
+		void			loadDataValues(std::multimap<Date, float> &target, std::fstream &file);
 		float			getRate(const Date &date) const;
 
 		int 			sepCheck(const std::string &line, char sep);
