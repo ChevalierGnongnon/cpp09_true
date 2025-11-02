@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 13:49:32 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/02 16:41:45 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 
 BitcoinExchange::BitcoinExchange(std::fstream &dataFile, std::fstream &valueFile){
-    loadData(this->dataCSV, dataFile, ',');
-	loadData(this->valuesCSV, valueFile, '|');
+    loadDataBDD(this->dataCSV, dataFile);
+	loadDataValues(this->valuesCSV, valueFile);
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &src){
@@ -36,16 +36,12 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src){
     return (*this);
 }
 
-void BitcoinExchange::loadData(std::multimap<Date, float> &target, std::fstream &file, char sep){
+void BitcoinExchange::loadDataBDD(std::multimap<Date, float> &target, std::fstream &file){
     std::string line;
     int         lineNumber = 1;
 
     while (std::getline(file, line)) {
-        try {
-            parseLine(target, line, sep, lineNumber);
-        } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
-        } 
+        parseLine(target, line, ',', lineNumber);
         ++lineNumber;
     }
 }
@@ -231,20 +227,20 @@ static std::string formatDate(const Date &d){
     return (oss.str());
 }
 
-void	BitcoinExchange::evaluate() const{
-	std::multimap<Date, float>::const_iterator	it;
+// void	BitcoinExchange::evaluate() const{
+// 	std::multimap<Date, float>::const_iterator	it;
 	
-	for (it = this->valuesCSV.begin(); it != this->valuesCSV.end(); ++it){
-		const Date	&d = it->first;
-		float		value = it->second;
-		float		rate;
+// 	for (it = this->valuesCSV.begin(); it != this->valuesCSV.end(); ++it){
+// 		const Date	&d = it->first;
+// 		float		value = it->second;
+// 		float		rate;
 
-		try{
-			rate = this->getRate(d);
-			std::cout << formatDate(d) << " => " << value << " = " << (rate * value) << std::endl;
-		} catch (const std::exception &e){
-            std::cerr << "Error: no earlier rate for " << formatDate(d) << std::endl;
-        }
-	}
-}
+// 		try{
+// 			rate = this->getRate(d);
+// 			std::cout << formatDate(d) << " => " << value << " = " << (rate * value) << std::endl;
+// 		} catch (const std::exception &e){
+//             std::cerr << "Error: no earlier rate for " << formatDate(d) << std::endl;
+//         }
+// 	}
+// }
 

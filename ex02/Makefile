@@ -6,11 +6,11 @@
 #    By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/15 14:08:34 by chhoflac          #+#    #+#              #
-#    Updated: 2025/10/31 16:48:56 by chhoflac         ###   ########.fr        #
+#    Updated: 2025/11/02 16:41:10 by chhoflac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = RPN
+NAME = PmergeMe
 
 SOURCES = main.cpp \
 		PMergeMe.cpp
