@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/10/31 16:50:19 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/03 11:12:18 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,8 @@ void				insertMinsByJacobsthalOrderVector(std::vector<int> &result, std::vector<
 		ins  = lower_bound_upto_vector(result, 0, hi, val);
 		result.insert(result.begin() + ins, val);
 		for (size_t k = 0; k < pos.size(); ++k) {
-			if (pos[k] >= ins) pos[k]++;
+			if (pos[k] >= ins)
+				pos[k]++;
     	}
 	}
 }
@@ -457,7 +458,8 @@ void				insertMinsByJacobsthalOrderDeque(std::deque<int> &result, std::deque<siz
 		ins  = lower_bound_upto_deque(result, 0, hi, val);
 		result.insert(result.begin() + ins, val);
 		for (size_t k = 0; k < pos.size(); ++k) {
-			if (pos[k] >= ins) pos[k]++;
+			if (pos[k] >= ins)
+				pos[k]++;
     	}
 	}
 }
