@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/03 13:21:07 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/03 15:04:28 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,7 @@ std::vector<size_t>	makeJacobsthalVector(size_t size){
 	while (true){
 		next = j[j.size() - 1] + (2 * j[j.size() - 2]);
 		j.push_back(next);
+		// std::cout << "next :" << next << std::endl; if we want to see jacobsthal value
 		if (next >= size)
 			break;
 	}
@@ -423,8 +424,8 @@ static void			insertionSortDeque(std::deque<int> &base, std::deque<size_t> &keys
 	}
 }
 
-//makes jacobstha suite, it's also possible to do it without recursion.
-//while (true) here because we have to calculate nect before texting it.
+//makes jacobsthal suite, it's also possible to do it without recursion.
+//while (true) here because we have to calculate next before testing it.
 //Jackobsthal suite : j(n) = j(n - 1) + (2 * j(n - 2))
 // J(0) = 0
 // J(1) = 1
@@ -541,14 +542,14 @@ void				PMergeMe::sortDeque(){
 		keys.push_back(j); //push keys for keeping the order
 	insertionSortDeque(maxes, keys); //sort maxes
 	pairsSize = keys.size(); // get pair numbers for jackobsthal suite
-	if (keys.size() == 0 && hasStraggler){ // if there is only one number, just push it and early return.
+	if (keys.size() == 0 && hasStraggler){ // if there is only one number, just push (the straggler) it and early return.
 		result.push_back(straggler);
 		this->resDeque = result;
 		return ;
 	}
 	else if (keys.size() == 0 && !hasStraggler) // if theres nothing, just early return.
 		return ;
-	result = maxes;
+	result = maxes; //maxes are here used as a base to place the smaller ones 
 	jackobstahl = makeJacobsthalDeque(pairsSize); // make jackobsthal suite, until we reach pairsize
 	pos.resize(keys.size());
 	for (size_t k = 0; k < keys.size(); k++){
