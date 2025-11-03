@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/03 11:12:18 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/03 13:21:07 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,6 +308,7 @@ void				PMergeMe::sortVect(){
 	pairsSize = keys.size();
 	if (keys.size() == 0 && hasStraggler){
 		result.push_back(straggler);
+		this->resVector = result;
 		return ;
 	}
 	else if (keys.size() == 0 && !hasStraggler)
@@ -332,6 +333,7 @@ void				PMergeMe::sortVect(){
 //////////////////////DEQUE///////////////////////
 //////////////////////////////////////////////////
 
+//forms pairs and place it into a vector of <std::pair<int, int>>. changes position if min is on the right.
 void				PMergeMe::formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit){
 	size_t	i = 0;
 	int		min;
@@ -352,6 +354,7 @@ void				PMergeMe::formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t
 	}
 }
 
+//Starts chrono and make algo
 double				PMergeMe::runDequePipelineUs(){
 	struct timeval	start;
 	struct timeval	end;
@@ -363,6 +366,8 @@ double				PMergeMe::runDequePipelineUs(){
 	return ((end.tv_sec - start.tv_sec) * 1e6 + (end.tv_usec - start.tv_usec));
 }
 
+
+//Fills the deque container
 void				PMergeMe::fillDeque(){
 	size_t	i = 0;
 
@@ -381,18 +386,21 @@ void				PMergeMe::fillDeque(){
 	}
 }
 
+//gets the first element of each pair and place into a container (mins)
 void				getMinsDeque(const std::deque<std::pair<int, int> > &pairs, std::deque<int> &mins){
 	mins.clear();
 	for (size_t i = 0; i < pairs.size(); i++)
 		mins.push_back(pairs[i].first);
 }
 
+//gets the second element of each pair and place into a container (maxes)
 void				getMaxesDeque(const std::deque<std::pair<int, int> > &pairs, std::deque<int> &maxes){
 	maxes.clear();
 	for (size_t i = 0; i < pairs.size(); i++)
 		maxes.push_back(pairs[i].second);
 }
 
+//Sorts maxes by insertion algorithm. change the keys deque too to keep the order.
 static void			insertionSortDeque(std::deque<int> &base, std::deque<size_t> &keys){
 	size_t	i = 1;
 	size_t	j;
@@ -415,6 +423,15 @@ static void			insertionSortDeque(std::deque<int> &base, std::deque<size_t> &keys
 	}
 }
 
+//makes jacobstha suite, it's also possible to do it without recursion.
+//while (true) here because we have to calculate nect before texting it.
+//Jackobsthal suite : j(n) = j(n - 1) + (2 * j(n - 2))
+// J(0) = 0
+// J(1) = 1
+// J(2) = J(1) + 2 * J(0) = 1 + 2 * 0 = 1
+// J(3) = J(2) + 2 * J(1) = 1 + 2 * 1 = 3
+// J(4) = J(3) + 2 * J(2) = 3 + 2 * 1 = 5
+// J(5) = J(4) + 2 * J(3) = 5 + 2 * 3 = 11
 std::deque<size_t>	makeJacobsthalDeque(size_t size){
 	std::deque<size_t>	j;
 	size_t				next;
@@ -423,7 +440,7 @@ std::deque<size_t>	makeJacobsthalDeque(size_t size){
 	j.push_back(1);
 	if (size <= 1)
 		return (j);
-	while (true){
+	while (true){ 
 		next = j[j.size() - 1] + (2 * j[j.size() - 2]);
 		j.push_back(next);
 		if (next >= size)
@@ -486,6 +503,7 @@ void				buildJacobsthalInsertionOrderDeque(std::deque<size_t>	&order, const std:
 	}
 }
 
+//checks if the container size is odd. if yes, isolate the last element.
 bool				PMergeMe::stragglerCheckDeque(size_t *limit, int *straggler){
 	if (this->cont.size() % 2 == 1){
 		(*straggler) = cont.back();
@@ -515,22 +533,23 @@ void				PMergeMe::sortDeque(){
 	bool								hasStraggler = false;
 	
 	hasStraggler = this->stragglerCheckDeque(&limit, &straggler);
-	formPairsDeque(pairs, limit);
-	getMaxesDeque(pairs, maxes);
-	getMinsDeque(pairs, mins);
-	keys.clear();
+	formPairsDeque(pairs, limit); // form pairs to separate min amd max later.
+	getMaxesDeque(pairs, maxes); // put maxes value (second) into another deque.
+	getMinsDeque(pairs, mins); // put mins value (first) into another deque.
+	keys.clear(); //clear keys to avoid residual values (prevention, normally wont happen)
 	for (size_t j = 0; j < pairs.size(); j++)
-		keys.push_back(j);
-	insertionSortDeque(maxes, keys);
-	pairsSize = keys.size();
-	if (keys.size() == 0 && hasStraggler){
+		keys.push_back(j); //push keys for keeping the order
+	insertionSortDeque(maxes, keys); //sort maxes
+	pairsSize = keys.size(); // get pair numbers for jackobsthal suite
+	if (keys.size() == 0 && hasStraggler){ // if there is only one number, just push it and early return.
 		result.push_back(straggler);
+		this->resDeque = result;
 		return ;
 	}
-	else if (keys.size() == 0 && !hasStraggler)
+	else if (keys.size() == 0 && !hasStraggler) // if theres nothing, just early return.
 		return ;
 	result = maxes;
-	jackobstahl = makeJacobsthalDeque(pairsSize);
+	jackobstahl = makeJacobsthalDeque(pairsSize); // make jackobsthal suite, until we reach pairsize
 	pos.resize(keys.size());
 	for (size_t k = 0; k < keys.size(); k++){
 		size_t p = keys[k];
