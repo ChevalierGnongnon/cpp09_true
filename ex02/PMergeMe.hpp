@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/03 11:08:59 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:05:08 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,28 +44,39 @@ class PMergeMe{
 		const std::deque<int>	&getResDeque() const;
 		const std::string		&getInput() const;
 
-		void					showResVector() const;
-		void					showResDeque() const;
-		
 		int 					getValue(size_t *i);
-		
-		void					fillVector();
-		void					fillDeque();
-			
-		void					formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit);
-		void					formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit);
-				
-		void					sortVect();
-		void					sortDeque();
 
-		double					runVectorPipelineUs();
-		double					runDequePipelineUs();
-
-		bool					stragglerCheckVector(size_t *limit, int *straggler);
-		bool					stragglerCheckDeque(size_t *limit, int *straggler);
-		
 		class InvalidInputException : public std::exception{
 			public :
 				virtual const char *what() const throw();
 		};
+
+		void					fillVector();
+		void					fillDeque();
+
+		void					showStartVector() const;
+		void					showStartDeque() const;
+		void					showResVector() const;
+		void					showResDeque() const;
 };
+
+		
+		
+		
+		
+		
+		
+			
+		// // void					formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit);
+		// void					formPairsDeque(std::deque<std::pair<int, int> > &pairs, size_t limit);
+				
+		// // void					sortVect();
+		// void					sortDeque();
+
+		// // double					runVectorPipelineUs();
+		// double					runDequePipelineUs();
+
+		// // bool					stragglerCheckVector(size_t *limit, int *straggler);
+		// bool					stragglerCheckDeque(size_t *limit, int *straggler);
+		
+		

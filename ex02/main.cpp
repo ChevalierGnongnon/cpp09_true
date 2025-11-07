@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:40 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/01 17:30:26 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:10:31 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,28 @@ int main(int argc, char **argv)
 	try{
 		PMergeMe test(input);
 
-		std::cout << "Before: " << test.getInput() << std::endl;
+		test.showStartVector();
+		test.showStartDeque();
+		// std::cout << "Before: " << test.getInput() << std::endl;
 
-		double timeVect = test.runVectorPipelineUs();
-		double timeDeque = test.runDequePipelineUs();
+		// double timeVect = test.runVectorPipelineUs();
+		// double timeDeque = test.runDequePipelineUs();
 
-		std::cout << "After: ";
-		test.showResVector();
-		std::cout << std::endl;
+		// std::cout << "After: ";
+		// test.showResVector();
+		// std::cout << std::endl;
 
-		std::cout << std::fixed << std::setprecision(5);
+		// std::cout << std::fixed << std::setprecision(5);
 
-		std::cout << "Time to process a range of "
-				  << test.getVect().size()
-				  << " elements with std::vector : "
-				  << timeVect << " us" << std::endl;
+		// std::cout << "Time to process a range of "
+		// 		  << test.getVect().size()
+		// 		  << " elements with std::vector : "
+		// 		  << timeVect << " us" << std::endl;
 
-		std::cout << "Time to process a range of "
-				  << test.getCont().size()
-				  << " elements with std::deque : "
-				  << timeDeque << " us" << std::endl;
+		// std::cout << "Time to process a range of "
+		// 		  << test.getCont().size()
+		// 		  << " elements with std::deque : "
+		// 		  << timeDeque << " us" << std::endl;
 	}
 	catch (const std::exception &e){
 		std::cerr << e.what() << std::endl;
