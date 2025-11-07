@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:26 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/02 19:17:13 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:29:06 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@
 
 BitcoinExchange::BitcoinExchange(std::fstream &dataFile, std::fstream &valueFile){
     loadDataBDD(this->dataCSV, dataFile);
-	loadDataValues(this->valuesCSV, valueFile);
+	loadDataValues(valueFile);
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &src){
 	this->dataCSV = src.dataCSV;
-	this->valuesCSV = src.valuesCSV;
 }
 
 BitcoinExchange::~BitcoinExchange(){
@@ -33,7 +32,6 @@ BitcoinExchange::~BitcoinExchange(){
 BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src){
     if (this != &src){
         this->dataCSV = src.dataCSV;
-		this->valuesCSV = src.valuesCSV;
     }
     return (*this);
 }
@@ -44,14 +42,15 @@ static std::string formatDate(const Date &d){
     return (oss.str());
 }
 
-void BitcoinExchange::loadDataValues(std::multimap<Date, float> &target, std::fstream &file){
+void BitcoinExchange::loadDataValues(std::fstream &file){
     std::string line;
     int         lineNumber = 1;
 
     while (std::getline(file, line)) {
         try{
-            parseLine(target, line, '|', lineNumber);
             int sepPos = sepCheck(line, '|');
+            if (sepPos < 1 || sepPos >= (int)line.size() - 1)
+                throw (BadInputException(line, lineNumber));
             std::string dateString = cutSpaces(line.substr(0, sepPos));
             std::string valueString = cutSpaces(line.substr(sepPos + 1));
             if (lineNumber == 1 &&
@@ -60,8 +59,20 @@ void BitcoinExchange::loadDataValues(std::multimap<Date, float> &target, std::fs
                     ++lineNumber;
                     continue;
             }
+			if (valueString.empty())
+                throw (BadInputException(line, lineNumber));
+			if (dateString.size() != 10)
+                throw (BadInputException(line, lineNumber));
             Date d = parseDate(dateString);
+			 if (!d.getIsValid())
+                throw (BadInputException(line, lineNumber));
             float v = parseValue(valueString);
+			if (v == -1.0f)
+                throw (BadInputException(line, lineNumber));
+			if (v < 0.0f)
+                throw (NotPositiveException(line, lineNumber));
+            if (v > 1000.0f)
+                throw (TooLargeNumberException(line, lineNumber));
             float rate = getRate(d);
             std::cout << formatDate(d) << " => " << v << " = " << (rate * v) << std::endl;
         } catch (const NotPositiveException &){
@@ -273,23 +284,3 @@ void		BitcoinExchange::parseLine(std::multimap<Date, float> &target, const std::
 		target.insert(std::multimap<Date, float>::value_type(newOne, value));
 	}
 }
-
-
-
-// void	BitcoinExchange::evaluate() const{
-// 	std::multimap<Date, float>::const_iterator	it;
-	
-// 	for (it = this->valuesCSV.begin(); it != this->valuesCSV.end(); ++it){
-// 		const Date	&d = it->first;
-// 		float		value = it->second;
-// 		float		rate;
-
-// 		try{
-// 			rate = this->getRate(d);
-// 			std::cout << formatDate(d) << " => " << value << " = " << (rate * value) << std::endl;
-// 		} catch (const std::exception &e){
-//             std::cerr << "Error: no earlier rate for " << formatDate(d) << std::endl;
-//         }
-// 	}
-// }
-

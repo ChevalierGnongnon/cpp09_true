@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:45:30 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/02 12:52:40 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:28:33 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 class BitcoinExchange{
 	private :
 		std::multimap <Date, float>	dataCSV;
-		std::multimap <Date, float>	valuesCSV;
 		BitcoinExchange();
 	public :
 		BitcoinExchange(std::fstream &dataFile, std::fstream &valueFile);
@@ -39,7 +38,7 @@ class BitcoinExchange{
 		BitcoinExchange &operator=(const BitcoinExchange &src);
 
 		void			loadDataBDD(std::multimap<Date, float> &target, std::fstream &file);
-		void			loadDataValues(std::multimap<Date, float> &target, std::fstream &file);
+		void			loadDataValues(std::fstream &file);
 		float			getRate(const Date &date) const;
 
 		int 			sepCheck(const std::string &line, char sep);
@@ -50,6 +49,4 @@ class BitcoinExchange{
 		Date 			parseDate(const std::string &line);
 		void			parseLine(std::multimap<Date, float> &target, const std::string &line, char sep, int lineNumber);
 		float			parseValue(const std::string &valueString);
-
-		void			evaluate() const;
 };
