@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/08 19:54:45 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/08 20:14:25 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,17 @@ class PMergeMe{
 		void								showResDeque() const;
 		void								ShowPairsVector(std::vector< std::pair<int, int> > &pairsVect, int i) const;
 		void								ShowPairsDeque(std::deque< std::pair<int, int> > &pairsVect, int i) const;
+		void								showDeque(const std::deque<int> &vect, const std::string &name);
+		void								showVect(const std::vector<int> &vect, const std::string &name);
 
 		std::vector<std::pair<int, int> >	FormPairsVector(const std::vector<int> &base, bool &hasStraggler, int &straggler);
 		std::deque<std::pair<int, int> >	FormPairsDeque(const std::deque<int> &base, bool &hasStraggler, int &straggler);
 
-		std::vector<int> 					getMaxesVector(std::vector<std::pair<int, int>> &pairs);
-		std::vector<int>					getMinsVector(std::vector<std::pair<int, int>> &pairs);
+		std::vector<int> 					getMaxesVector(const std::vector<std::pair<int, int> > &pairs);
+		std::vector<int>					getMinsVector(const std::vector<std::pair<int, int> > &pairs);
+
+		std::deque<int> 					getMaxesDeque(const std::deque<std::pair<int, int> > &pairs);
+		std::deque<int>						getMinsDeque(const std::deque<std::pair<int, int> > &pairs);
 };
 
 		
