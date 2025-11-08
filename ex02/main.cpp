@@ -6,11 +6,9 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:40 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/07 15:10:31 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/08 13:40:18 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "PMergeMe.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -31,9 +29,6 @@ int main(int argc, char **argv)
 	}
 	try{
 		PMergeMe test(input);
-
-		test.showStartVector();
-		test.showStartDeque();
 		// std::cout << "Before: " << test.getInput() << std::endl;
 
 		// double timeVect = test.runVectorPipelineUs();

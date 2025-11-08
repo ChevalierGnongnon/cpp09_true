@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/07 15:13:23 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/08 13:50:10 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ PMergeMe::PMergeMe(){
 }
 PMergeMe::PMergeMe(const std::string &values){
 	this->input = values;
+	std::cout << "Input : [" << input << "]" << std::endl;
 	fillVector();
 	fillDeque();
+	// this->showStartVector();
 }
 
 PMergeMe::PMergeMe(const PMergeMe &src){
@@ -39,16 +41,18 @@ PMergeMe::~PMergeMe(){
 }
 
 void					PMergeMe::showStartVector() const{
-	for (size_t i = 0; i < this->resVector.size(); i++){
+	std::cout << "Filled starting vector : ";
+	for (size_t i = 0; i < this->vect.size(); i++){
 		std::cout << "[" << this->vect[i] << "]";
-		if (i + 1 < this->resVector.size())
+		if (i + 1 < this->vect.size())
 			std::cout << " ";
 	}
 }
 void					PMergeMe::showStartDeque() const{
-	for (size_t i = 0; i < this->resDeque.size(); i++){
+	std::cout << "Filled starting deque : ";
+	for (size_t i = 0; i < this->cont.size(); i++){
 		std::cout << "[" << this->cont[i] << "]";
-		if (i + 1 < this->resDeque.size())
+		if (i + 1 < this->cont.size())
 			std::cout << " ";
 	}
 }
@@ -119,20 +123,26 @@ int 			PMergeMe::getValue(size_t *i) {
 	return (static_cast<int>(value));
 }
 
+
 void			PMergeMe::fillVector(){
 	size_t i = 0;
 	
 	this->vect.clear();
 	while(i < this->input.size()){
-		if (isdigit(this->input[i]) || this->input[i] == '+')
+		if (isdigit(this->input[i]) || this->input[i] == '+'){
 			this->vect.push_back(getValue(&i));
+			continue ;
+		}
+			
 		else if (isspace(this->input[i])){
-			while (i < this->input.size() && isspace(this->input[i]))
-				i++;
+			i++;
+			continue ;
 		}
 		else
 			throw (PMergeMe::InvalidInputException());
 	}
+	this->showStartVector();
+	std::cout << std::endl;
 }
 
 void			PMergeMe::fillDeque(){
@@ -140,50 +150,21 @@ void			PMergeMe::fillDeque(){
 	
 	this->cont.clear();
 	while(i < this->input.size()){
-		if (isdigit(this->input[i]) || this->input[i] == '+')
+		if (isdigit(this->input[i]) || this->input[i] == '+'){
 			this->cont.push_back(getValue(&i));
+			continue ;
+		}
+			
 		else if (isspace(this->input[i])){
-			while (i < this->input.size() && isspace(this->input[i]))
-				i++;
+			i++;
+			continue ;
 		}
 		else
 			throw (PMergeMe::InvalidInputException());
 	}
+	this->showStartDeque();
+	std::cout << std::endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // void				PMergeMe::fillVector(){
-// // 	size_t	i = 0;
-
-// // 	this->vect.clear();
-// // 	while (i < this->input.size()){
-// // 		if (isdigit((unsigned char) this->input[i])|| this->input[i] == '+'){
-// // 			this->vect.push_back(getValue(&i));
-// // 			continue ;
-// // 		}
-// // 		if (isspace((unsigned char) this->input[i])){
-// // 			i++;
-// // 			continue;
-// // 		}
-// // 		else
-// // 			throw (PMergeMe::InvalidInputException());
-// // 	}
-// // }
 
 
 
