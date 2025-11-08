@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/08 13:50:10 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/08 15:28:20 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,27 @@ void					PMergeMe::showStartDeque() const{
 		if (i + 1 < this->cont.size())
 			std::cout << " ";
 	}
+}
+
+void					PMergeMe::ShowPairsVector(std::vector< std::pair<int, int> > &pairsVect, int i) const{
+	std::cout << "[Vector] Forming pairs into vector for the " << i << "time :" << std::endl;
+	std::cout << "[Vector] Number of pairs :" << pairsVect.size() << std::endl;
+	for (size_t i = 0; i < pairsVect.size(); i++){
+		std::cout << "{" << pairsVect[i].first << "," <<  pairsVect[i].second << "} , ";
+	}
+	std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
+}
+
+
+void					PMergeMe::ShowPairsDeque(std::deque< std::pair<int, int> > &pairsDeque, int i) const {
+	std::cout << "[Deque] Forming pairs into vector for the " << i << "time :" << std::endl;
+	std::cout << "[Deque] Number of pairs :" << pairsDeque.size() << std::endl;
+	for (size_t i = 0; i < pairsDeque.size(); i++){
+		std::cout << "{" << pairsDeque[i].first << "," <<  pairsDeque[i].second << "} , ";
+	}
+	std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
 }
 
 void					PMergeMe::showResVector() const{
@@ -124,6 +145,7 @@ int 			PMergeMe::getValue(size_t *i) {
 }
 
 
+
 void			PMergeMe::fillVector(){
 	size_t i = 0;
 	
@@ -144,6 +166,8 @@ void			PMergeMe::fillVector(){
 	this->showStartVector();
 	std::cout << std::endl;
 }
+
+
 
 void			PMergeMe::fillDeque(){
 	size_t i = 0;
@@ -166,6 +190,17 @@ void			PMergeMe::fillDeque(){
 	std::cout << std::endl;
 }
 
+std::vector<std::pair<int, int> >	PMergeMe::FormPairsVector(const std::vector<int> &bas, bool &hasStraggler, int &straggler){
+	std::vector <std::pair<int, int> > newVector;
+	size_t i = 0;
+
+	
+
+}
+
+std::deque<std::pair<int, int> >	PMergeMe::FormPairsDeque(const std::deque<int> &bas, bool &hasStraggler, int &straggler){
+	
+}
 
 
 // // void 				PMergeMe::formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit){

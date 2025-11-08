@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/07 15:05:08 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/08 15:27:28 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@
 
 class PMergeMe{
 	private :
-		std::vector<int>		vect;
-		std::vector<int>		resVector;
-		std::deque<int>			cont;
-		std::deque<int>			resDeque;
-		std::string				input;
+		std::vector<int>					vect;
+		std::vector<int>					resVector;
+		std::deque<int>						cont;
+		std::deque<int>						resDeque;
+		std::string							input;
 		
 	public :
 		PMergeMe();
@@ -38,33 +38,33 @@ class PMergeMe{
 		PMergeMe &operator=(const PMergeMe &src);
 		~PMergeMe();
 		
-		const std::vector<int>	&getVect() const;
-		const std::vector<int>	&getResVect() const;
-		const std::deque<int>	&getCont() const;
-		const std::deque<int>	&getResDeque() const;
-		const std::string		&getInput() const;
+		const std::vector<int>	&			getVect() const;
+		const std::vector<int>				&getResVect() const;
+		const std::deque<int>	&			getCont() const;
+		const std::deque<int>				&getResDeque() const;
+		const std::string					&getInput() const;
 
-		int 					getValue(size_t *i);
+		int 								getValue(size_t *i);
 
 		class InvalidInputException : public std::exception{
 			public :
 				virtual const char *what() const throw();
 		};
 
-		void					fillVector();
-		void					fillDeque();
+		void								fillVector();
+		void								fillDeque();
 
-		void					showStartVector() const;
-		void					showStartDeque() const;
-		void					showResVector() const;
-		void					showResDeque() const;
+		void								showStartVector() const;
+		void								showStartDeque() const;
+		void								showResVector() const;
+		void								showResDeque() const;
+		void								ShowPairsVector(std::vector< std::pair<int, int> > &pairsVect, int i) const;
+		void								ShowPairsDeque(std::deque< std::pair<int, int> > &pairsVect, int i) const;
+
+		std::vector<std::pair<int, int> >	FormPairsVector(const std::vector<int> &base, bool &hasStraggler, int &straggler);
+		std::deque<std::pair<int, int> >	FormPairsDeque(const std::deque<int> &base, bool &hasStraggler, int &straggler);
 };
 
-		
-		
-		
-		
-		
 		
 			
 		// // void					formPairsVect(std::vector<std::pair<int, int> > &pairs, size_t limit);
