@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/08 20:29:34 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/09 00:36:16 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,6 +327,21 @@ std::deque<int>					PMergeMe::getMinsDeque(const std::deque<std::pair<int, int> 
 	}
 	showDeque(newMinDeque, "mins");
 	return (newMinDeque);
+}
+
+void							PMergeMe::applyFordJohnson(std::vector <int> &before){
+	std::vector<std::pair<int, int> >	pairs;
+	std::vector<int>					maxes;
+	std::vector<int>					mins;
+	bool								hasStraggler;
+	int									straggler;
+	
+	if (before.size() <= 1)
+		return ;
+	pairs = FormPairsVector(before, hasStraggler, straggler);
+	maxes = getMaxesVector(pairs);
+	applyFordJohnson(maxes);
+	
 }
 
 // // double				PMergeMe::runVectorPipelineUs(){
