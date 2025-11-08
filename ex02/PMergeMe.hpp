@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/08 15:27:28 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/08 19:54:45 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ class PMergeMe{
 
 		std::vector<std::pair<int, int> >	FormPairsVector(const std::vector<int> &base, bool &hasStraggler, int &straggler);
 		std::deque<std::pair<int, int> >	FormPairsDeque(const std::deque<int> &base, bool &hasStraggler, int &straggler);
+
+		std::vector<int> 					getMaxesVector(std::vector<std::pair<int, int>> &pairs);
+		std::vector<int>					getMinsVector(std::vector<std::pair<int, int>> &pairs);
 };
 
 		
