@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/09 00:34:52 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/09 22:59:45 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,15 @@ class PMergeMe{
 
 		std::deque<int> 					getMaxesDeque(const std::deque<std::pair<int, int> > &pairs);
 		std::deque<int>						getMinsDeque(const std::deque<std::pair<int, int> > &pairs);
-		void								applyFordJohnson(std::vector<int> &before);
-	
+		
+		void								applyFordJohnsonOnVector(std::vector<int> &before);
+		void								applyFordJohnsonOnDeque(std::deque <int> &before);
+
+		double								runTimerOnVector();
+		double								runTimerOnDeque();
 };
+
+// #include ""
 
 		
 			

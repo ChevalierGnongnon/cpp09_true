@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/09 00:36:16 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/09 15:56:27 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,31 @@ PMergeMe::PMergeMe(){
 }
 PMergeMe::PMergeMe(const std::string &values){
 	this->input = values;
-	bool strag;
-	int	valstrag;
-	std::cout << "Input : [" << input << "]" << std::endl;
-	fillVector();
-	fillDeque();
-	std::deque<std::pair <int, int> >deq = FormPairsDeque(this->cont, strag, valstrag);
-	std::vector<std::pair <int, int> > vect = FormPairsVector(this->vect, strag, valstrag);
-	getMaxesDeque(deq);
-	getMaxesVector(vect);
-	getMinsDeque(deq);
-	getMinsVector(vect);
-	
-	
+	runTimerOnVector();
+	runTimerOnDeque();
 	// this->showStartVector();
+}
+
+double				PMergeMe::runTimerOnVector(){
+	struct timeval	start;
+	struct timeval	end;
+	
+	gettimeofday(&start, NULL);
+	fillVector();
+	applyFordJohnsonOnVector(this->vect);
+	gettimeofday(&end, NULL);
+	return (((end.tv_sec - start.tv_sec) * 1e6) + (end.tv_usec - start.tv_usec));
+}
+
+double				PMergeMe::runTimerOnDeque(){
+	struct timeval	start;
+	struct timeval	end;
+	
+	gettimeofday(&start, NULL);
+	fillDeque();
+	applyFordJohnsonOnDeque(this->cont);
+	gettimeofday(&end, NULL);
+	return (((end.tv_sec - start.tv_sec) * 1e6) + (end.tv_usec - start.tv_usec));
 }
 
 PMergeMe::PMergeMe(const PMergeMe &src){
@@ -236,6 +247,7 @@ std::vector<std::pair<int, int> >	PMergeMe::FormPairsVector(const std::vector<in
 	std::vector <std::pair<int, int> >	newVector;
 	size_t								i = 0;
 	size_t								limit;
+	static unsigned long long			calls = 0;
 	int									min; 
 	int									max;
 
@@ -259,7 +271,8 @@ std::vector<std::pair<int, int> >	PMergeMe::FormPairsVector(const std::vector<in
 		newVector.push_back(std::pair<int, int>(min, max));
 		i += 2;
 	}
-	ShowPairsVector(newVector, 0);
+	calls++;
+	ShowPairsVector(newVector, calls);
 	return (newVector);
 }
 
@@ -267,6 +280,7 @@ std::deque<std::pair<int, int> >	PMergeMe::FormPairsDeque(const std::deque<int> 
 	std::deque <std::pair<int, int> >	newDeque;
 	size_t								i = 0;
 	size_t								limit;
+	static unsigned long long			calls = 0;
 	int									min; 
 	int									max;
 
@@ -278,7 +292,7 @@ std::deque<std::pair<int, int> >	PMergeMe::FormPairsDeque(const std::deque<int> 
 		hasStraggler = true;
 	}
 	while (i < limit){
-		if (this->vect[i] < this->vect[i + 1]){
+		if (base[i] < base[i + 1]){
 			min = base[i];
 			max	= base[i + 1];
 		}
@@ -289,7 +303,8 @@ std::deque<std::pair<int, int> >	PMergeMe::FormPairsDeque(const std::deque<int> 
 		newDeque.push_back(std::pair<int, int>(min, max));
 		i += 2;
 	}
-	ShowPairsDeque(newDeque, 0);
+	calls++;
+	ShowPairsDeque(newDeque, calls);
 	return (newDeque);
 }
 
@@ -329,7 +344,7 @@ std::deque<int>					PMergeMe::getMinsDeque(const std::deque<std::pair<int, int> 
 	return (newMinDeque);
 }
 
-void							PMergeMe::applyFordJohnson(std::vector <int> &before){
+void							PMergeMe::applyFordJohnsonOnVector(std::vector <int> &before){
 	std::vector<std::pair<int, int> >	pairs;
 	std::vector<int>					maxes;
 	std::vector<int>					mins;
@@ -340,20 +355,26 @@ void							PMergeMe::applyFordJohnson(std::vector <int> &before){
 		return ;
 	pairs = FormPairsVector(before, hasStraggler, straggler);
 	maxes = getMaxesVector(pairs);
-	applyFordJohnson(maxes);
+	applyFordJohnsonOnVector(maxes);
 	
 }
 
-// // double				PMergeMe::runVectorPipelineUs(){
-// // 	struct timeval	start;
-// // 	struct timeval	end;
+void							PMergeMe::applyFordJohnsonOnDeque(std::deque <int> &before){
+	std::deque<std::pair<int, int> >	pairs;
+	std::deque<int>						maxes;
+	std::deque<int>						mins;
+	bool								hasStraggler;
+	int									straggler;
 	
-// // 	gettimeofday(&start, NULL);
-// // 	fillVector();
-// // 	sortVect();
-// // 	gettimeofday(&end, NULL);
-// // 	return ((end.tv_sec - start.tv_sec) * 1e6 + (end.tv_usec - start.tv_usec));
-// // }
+	if (before.size() <= 1)
+		return ;
+	pairs = FormPairsDeque(before, hasStraggler, straggler);
+	maxes = getMaxesDeque(pairs);
+	applyFordJohnsonOnDeque(maxes);
+	
+}
+
+
 
 
 // // static void			getMaxesVector(const std::vector <std::pair<int, int> > &pairs, std::vector <int> &maxes){
