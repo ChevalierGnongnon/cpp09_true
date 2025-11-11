@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:47 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/09 15:56:27 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/11 16:15:35 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ PMergeMe::PMergeMe(){
 PMergeMe::PMergeMe(const std::string &values){
 	this->input = values;
 	runTimerOnVector();
-	runTimerOnDeque();
+	// runTimerOnDeque();
 	// this->showStartVector();
 }
 
@@ -243,23 +243,14 @@ void			PMergeMe::fillDeque(){
 	std::cout << std::endl;
 }
 
-std::vector<std::pair<int, int> >	PMergeMe::FormPairsVector(const std::vector<int> &base, bool &hasStraggler, int &straggler){
+std::vector<std::pair<int, int> >	PMergeMe::FormPairsVector(const std::vector<int> &base, size_t limit){
 	std::vector <std::pair<int, int> >	newVector;
 	size_t								i = 0;
-	size_t								limit;
 	static unsigned long long			calls = 0;
 	int									min; 
 	int									max;
 
-	limit = base.size();
-	hasStraggler = false;
-	if (base.size() % 2 == 1){
-		limit--;
-		straggler = base[base.size() - 1];
-		hasStraggler = true;
-	}
-	
-	while (i < limit){
+	while (i + 1 < limit){
 		if (base[i] < base[i + 1]){
 			min = base[i];
 			max	= base[i + 1];
@@ -303,7 +294,7 @@ std::deque<std::pair<int, int> >	PMergeMe::FormPairsDeque(const std::deque<int> 
 		newDeque.push_back(std::pair<int, int>(min, max));
 		i += 2;
 	}
-	calls++;
+	calls++;git 
 	ShowPairsDeque(newDeque, calls);
 	return (newDeque);
 }
@@ -344,19 +335,55 @@ std::deque<int>					PMergeMe::getMinsDeque(const std::deque<std::pair<int, int> 
 	return (newMinDeque);
 }
 
+
+void PMergeMe::recurseOnPairs(std::vector<std::pair<int, int> > &pairs, unsigned long long blockSize){
+    std::vector<std::pair<int, int> >	tmp1;
+    std::vector<std::pair<int, int> >	tmp2;
+	static int							nb = 0;
+    size_t j;
+    size_t k;
+    size_t leftStart;
+    size_t rightStart;
+
+    size_t elementCount = pairs.size() / blockSize;
+    if (elementCount < 2)
+        return;
+    for (size_t i = 0; i + 1 < elementCount; i += 2) {
+        tmp1.clear();
+        tmp2.clear();
+        leftStart  = i * blockSize;
+        rightStart = (i + 1) * blockSize;
+        for (j = leftStart; j < leftStart + blockSize; ++j)
+            tmp1.push_back(pairs[j]);
+        for (k = rightStart; k < rightStart + blockSize; ++k)
+            tmp2.push_back(pairs[k]);
+        if (tmp1[blockSize - 1].second > tmp2[blockSize - 1].second) {
+            size_t n = 0;
+            for (size_t l = leftStart; l < leftStart + blockSize; ++l, ++n)
+                pairs[l] = tmp2[n];
+            n = 0;
+            for (size_t m = rightStart; m < rightStart + blockSize; ++m, ++n)
+                pairs[m] = tmp1[n];
+        }
+    }
+	nb++;
+    recurseOnPairs(pairs, blockSize * 2);
+	ShowPairsVector(pairs, nb);
+}
+
 void							PMergeMe::applyFordJohnsonOnVector(std::vector <int> &before){
 	std::vector<std::pair<int, int> >	pairs;
-	std::vector<int>					maxes;
-	std::vector<int>					mins;
-	bool								hasStraggler;
-	int									straggler;
+	// bool								hasStraggler = false;
+	// int									straggler;
+	size_t								limit = before.size();
 	
-	if (before.size() <= 1)
-		return ;
-	pairs = FormPairsVector(before, hasStraggler, straggler);
-	maxes = getMaxesVector(pairs);
-	applyFordJohnsonOnVector(maxes);
-	
+	if (before.size() % 2 == 1){
+		// straggler = before[before.size() - 1];
+		limit--;
+		// hasStraggler = true;
+	}
+	pairs = FormPairsVector(before, limit);
+	recurseOnPairs(pairs, 1);
 }
 
 void							PMergeMe::applyFordJohnsonOnDeque(std::deque <int> &before){

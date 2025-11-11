@@ -6,7 +6,7 @@
 /*   By: chhoflac <chhoflac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 14:08:51 by chhoflac          #+#    #+#             */
-/*   Updated: 2025/11/09 22:59:45 by chhoflac         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:10:44 by chhoflac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ class PMergeMe{
 		void								showDeque(const std::deque<int> &vect, const std::string &name);
 		void								showVect(const std::vector<int> &vect, const std::string &name);
 
-		std::vector<std::pair<int, int> >	FormPairsVector(const std::vector<int> &base, bool &hasStraggler, int &straggler);
+		std::vector<std::pair<int, int> >	FormPairsVector(const std::vector<int> &base, size_t limit);
 		std::deque<std::pair<int, int> >	FormPairsDeque(const std::deque<int> &base, bool &hasStraggler, int &straggler);
 
 		std::vector<int> 					getMaxesVector(const std::vector<std::pair<int, int> > &pairs);
@@ -71,6 +71,8 @@ class PMergeMe{
 
 		std::deque<int> 					getMaxesDeque(const std::deque<std::pair<int, int> > &pairs);
 		std::deque<int>						getMinsDeque(const std::deque<std::pair<int, int> > &pairs);
+
+		void 								recurseOnPairs(std::vector<std::pair<int, int> > &pairs, unsigned long long blockSize);
 		
 		void								applyFordJohnsonOnVector(std::vector<int> &before);
 		void								applyFordJohnsonOnDeque(std::deque <int> &before);
